@@ -1,4 +1,7 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Created by terence on 10/1/16.
@@ -43,17 +46,22 @@ public class Map {
             }
         }
     }
-
     public static void main(String[] args) {
         Map m=new Map();
         m.readmap("data/nodenumber_10_edgenumber_327.map");
         int [][]s=m.graph.getEdgeMatrix();
         int start=5;
-        int end=10;
+        int end=96;
+
+
         Dijsktra di=new Dijsktra();
         di.dodijsktra(s,start);
-        System.out.println(di.getpath(end));
-        System.out.println(di.getlength(end));
+
+        SPFA sp=new SPFA();
+        sp.dospfa(s,start);
+
+        di.getpathlength(end);
+        sp.getpathlength(end);
 
     }
 }
