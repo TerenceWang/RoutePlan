@@ -45,10 +45,15 @@ public class Dijsktra {
     }
 
 
-    public String getpath(int end ){
-        return path[end];
+    public int[] getpath(int end ){
+        String[] t=path[end].split(",");
+        int [] result=new int [t.length];
+        for (int i = 0; i < result.length; i++) {
+            result[i]=Integer.parseInt(t[i]);
+        }
+        return result;
     }
-    public int getlength(int end){
+    public int getpathlength(int end){
         return shortestpath[end];
     }
 }
