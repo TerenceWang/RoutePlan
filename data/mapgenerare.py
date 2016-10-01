@@ -33,7 +33,7 @@ for i in singleid:
     tmp.append(list[i*2+random.randint(0,1)])
 for i in tmp:
     list.remove(i)
-filename="nodenumber_"+str(nodenumber_line)+"_edgenumber_"+str(len(list))+".map"
+filename="nodenumber_"+str(nodenumber_total)+"_edgenumber_"+str(len(list))+".map"
 out = open(filename,"w")
 out.write(str(nodenumber_line)+" "+str(nodenumber_total)+" "+str(len(list))+"\n")
 for i in list:
