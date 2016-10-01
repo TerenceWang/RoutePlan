@@ -1,0 +1,10 @@
+It is a simple map gernerate program
+Use
+	python mapgenerare.py to run
+
+Using block map as an original map the result is a file end with .map.
+
+First line of the file is the node per line, node in total and the number of the edges
+
+Then the following line is structed as from + space + to + space + weight
+ 
