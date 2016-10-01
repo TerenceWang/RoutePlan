@@ -44,6 +44,12 @@ public class AMWGraph {
         numOfEdges--;
     }
 
+    public int[][] getEdgeMatrix(){
+        int[][] result=new int[numOfEdges][numOfEdges];
+        result=edges;
+        return result;
+    }
+
     public int getFirstNeighbor(int index) {
         for(int j=0;j<vertexList.size();j++) {
             if (edges[index][j]>0) {

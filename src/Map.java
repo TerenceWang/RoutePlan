@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Created by terence on 10/1/16.
@@ -46,10 +43,17 @@ public class Map {
             }
         }
     }
+
     public static void main(String[] args) {
         Map m=new Map();
         m.readmap("data/nodenumber_10_edgenumber_327.map");
-        System.out.println(m.graph.getFirstNeighbor(5));
-        System.out.println(m.nodeperline+"\t"+m.edgetotal);
+        int [][]s=m.graph.getEdgeMatrix();
+        int start=5;
+        int end=10;
+        Dijsktra di=new Dijsktra();
+        di.dodijsktra(s,start);
+        System.out.println(di.getpath(end));
+        System.out.println(di.getlength(end));
+
     }
 }
