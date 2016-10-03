@@ -56,12 +56,13 @@ public class Map {
 
         Dijsktra di=new Dijsktra();
         di.dodijsktra(s,start);
+        di.getpath(end);
 
         SPFA sp=new SPFA();
         sp.dospfa(s,start);
 
-        di.getpathlength(end);
-        sp.getpathlength(end);
+        System.out.println(di.getpathlength(end));
+        System.out.println(sp.getpathlength(end));
 
     }
 }

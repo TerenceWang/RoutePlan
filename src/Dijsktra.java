@@ -22,7 +22,7 @@ public class Dijsktra {
             int distance= Integer.MAX_VALUE;
             int k=-1;
             for(int i = 0;i < vertexnumber;i++){
-                if(visited[i] == 0 && edge[start][i] < distance && edge[start][i]>0){
+                if(visited[i] == 0 && edge[start][i] < distance){
                     distance = edge[start][i];
                     k = i;
                 }
@@ -31,12 +31,8 @@ public class Dijsktra {
 
             visited[k] = 1;
             for(int i = 0;i < vertexnumber;i++){
-                if(visited[i]==0&&edge[start][i]==0&&edge[k][i]>0){
-                    edge[start][i] = edge[start][k] + edge[k][i];
-                    path[i]=path[k]+","+i;
-                }
-                if(visited[i] == 0 && edge[start][k] + edge[k][i] < edge[start][i] && edge[start][k]>0
-                        && edge[k][i]>0){
+                if(visited[i] == 0 && edge[start][k] + edge[k][i] < edge[start][i]&&edge[k][i]<Integer.MAX_VALUE
+                        ){
                     edge[start][i] = edge[start][k] + edge[k][i];
                     path[i]=path[k]+","+i;
                 }

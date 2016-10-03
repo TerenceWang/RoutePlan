@@ -28,13 +28,13 @@ public class SPFA {
         while(!q.isEmpty()){
 
             x=q.poll();
-            visited[x]=false;  // 置出队的点未标记
+            visited[x]=false;
             for(int i=0;i<vextextotal;i++)
-                if(shortestpath[x]+edge[x][i]<shortestpath[i]&&edge[x][i]>0)  //这里就是所谓的松弛操作了
+                if(shortestpath[x]+edge[x][i]<shortestpath[i]&&edge[x][i]<Integer.MAX_VALUE)
                 {
-                    shortestpath[i]=edge[x][i]+shortestpath[x]; //更新路径
+                    shortestpath[i]=edge[x][i]+shortestpath[x];
                     Path[i]=x;
-                    if(!visited[i])  // 未被访问
+                    if(!visited[i])
                     {
                         q.offer(i);
                         visited[i]=true;
@@ -53,6 +53,7 @@ public class SPFA {
         }
         int []result=new int[tmp.size()];
         for (int i = tmp.size()-1; i >-1 ; i--) {
+
             result[i]=tmp.get(tmp.size()-1-i);
         }
         return result;
