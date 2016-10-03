@@ -58,11 +58,17 @@ public class Map {
         di.dodijsktra(s,start);
         di.getpath(end);
 
+
         SPFA sp=new SPFA();
         sp.dospfa(s,start);
+        Floyd fl=new Floyd();
+        fl.dofloyd(s);
+        int ss[]=fl.getpath(start,end);
+        for (int i = 0; i < ss.length; i++) {
+            System.out.println(ss[i]+" ");
+        }
+        System.out.println(fl.getpathlength(start,end));
 
-        System.out.println(di.getpathlength(end));
-        System.out.println(sp.getpathlength(end));
 
     }
 }
