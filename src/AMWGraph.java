@@ -8,6 +8,7 @@ public class AMWGraph {
     private int[][] edges;
     private int numOfEdges;
 
+
     public AMWGraph(int n) {
         edges=new int[n][n];
         vertexList=new ArrayList(n);
