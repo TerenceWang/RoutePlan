@@ -12,6 +12,12 @@ public class AMWGraph {
         edges=new int[n][n];
         vertexList=new ArrayList(n);
         numOfEdges=0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                edges[i][j]=Integer.MAX_VALUE;
+            }
+
+        }
     }
 
     public int getNumOfVertex() {
@@ -40,7 +46,7 @@ public class AMWGraph {
     }
 
     public void deleteEdge(int v1,int v2) {
-        edges[v1][v2]=0;
+        edges[v1][v2]=Integer.MAX_VALUE;
         numOfEdges--;
     }
 
@@ -52,7 +58,7 @@ public class AMWGraph {
 
     public int getFirstNeighbor(int index) {
         for(int j=0;j<vertexList.size();j++) {
-            if (edges[index][j]>0) {
+            if (edges[index][j]<Integer.MAX_VALUE) {
                 return j;
             }
         }
@@ -61,7 +67,7 @@ public class AMWGraph {
 
     public int getNextNeighbor(int v1,int v2) {
         for (int j=v2+1;j<vertexList.size();j++) {
-            if (edges[v1][j]>0) {
+            if (edges[v1][j]<Integer.MAX_VALUE) {
                 return j;
             }
         }
