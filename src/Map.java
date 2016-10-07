@@ -102,24 +102,28 @@ public class Map {
                             continue;
                         mapNow[i][k] += temp;
                         timeStartMap[i][k] = 1;
+                        System.out.println(i + " " + k + " " + temp);
                     }
                     System.out.println(i);
                 }
             }
         }
-        for(int i = 0; i < nodecount; ++i)
         {
-            for(int j = 0; j < nodecount; ++j)
+            int[][] timeMapOut = new int[nodecount][nodecount];
+            for(int i = 0; i < nodecount; ++i)
             {
-                timeMap[i][j] = mapNow[i][j] * mapDefault[i][j] / 200 + mapDefault[i][j];
-                if (timeMap[i][j] < 0)
-                    System.out.println(i + " " + j + " " + mapNow);
+                for(int j = 0; j < nodecount; ++j)
+                {
+                    timeMap[i][j] = mapNow[i][j] * mapDefault[i][j] /150 + mapDefault[i][j];
+                    timeMapOut[i][j] = timeMap[i][j];
+                    if (timeMap[i][j] > 100)
+                        System.out.println(1 + " " + i + " " + j + " " + timeMap[i][j]);
 //                if (timeMap[i][j] == 0)
 //                    timeMap[i][j] = Integer.MAX_VALUE;
+                }
             }
+            timeSeriesMapList.add(timeMapOut);
         }
-
-        timeSeriesMapList.add(timeMap);
         for(int i = 0; i < nodecount; ++i)
             for(int j = 0; j < nodecount; ++j)
             {
@@ -168,16 +172,20 @@ public class Map {
                 }
 
             }
-            for(int i = 0; i < nodecount; ++i)
-                for(int j = 0; j < nodecount; ++j)
-                {
-                    timeMap[i][j] = mapNow[i][j] * mapDefault[i][j] / 200 + mapDefault[i][j];
-                    if (timeMap[i][j] < 0)
-                        System.out.println(timeSeries + " " + i + " " + j + " " + mapNow[i][j]);
+            {
+                int[][] timeMapOut = new int[nodecount][nodecount];
+                for(int i = 0; i < nodecount; ++i)
+                    for(int j = 0; j < nodecount; ++j)
+                    {
+                        timeMap[i][j] = mapNow[i][j] * mapDefault[i][j]/150 + mapDefault[i][j];
+                        timeMapOut[i][j] = timeMap[i][j];
+//                    if (mapNow[i][j] > 0)
+//                        System.out.println(timeSeries + " " + i + " " + j + " " + mapNow[i][j] * mapDefault[i][j] / 200);
 //                if (timeMap[i][j] == 0)
 //                    timeMap[i][j] = Integer.MAX_VALUE;
-                }
-            timeSeriesMapList.add(timeMap);
+                    }
+                 timeSeriesMapList.add(timeMapOut);
+            }
 
             for(int i = 0; i < nodecount; ++i)
                 for(int j = 0; j < nodecount; ++j)
@@ -277,13 +285,22 @@ public class Map {
 
         ArrayList<int[][]> tmp = new ArrayList<>();
         tmp=generateTrafficFlow(m);
-        for (int i = 0; i < 100; i++) {
+//            for(int j = 0; j < tmp.get(1).length; ++j) {
+//                for(int k = 0; k < tmp.get(1).length; ++k)
+//                    System.out.print(tmp.get(1)[j][k] + " ");
+//                System.out.println();
+//            }
+
+        for (int i = 0; i < 2; i++) {
             for(int j = 0; j < tmp.get(i).length; ++j) {
                 for(int k = 0; k < tmp.get(i).length; ++k)
                     System.out.print(tmp.get(i)[j][k] + " ");
+//                    if(tmp.get(i)[j][k] > 100)
+//                        System.out.println(i + " " + j + " " + k);
                 System.out.println();
-            }
 
+            }
+            System.out.println();
         }
         System.out.println();
 
