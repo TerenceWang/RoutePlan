@@ -51,11 +51,13 @@ public class Map {
         for (int i = 0; i < nodecount; i++) {
             ArrayList<Double> countlist=new ArrayList<Double>();
             int id=m.graph.getFirstNeighbor(i);
-            countlist.add(peredgeweight(k));
+            if(id!=-1)
+                countlist.add(peredgeweight(k));
 
             while(id!=-1){
                 id=m.graph.getNextNeighbor(i,id);
-                countlist.add(peredgeweight(k));
+                if(id!=-1)
+                    countlist.add(peredgeweight(k));
             }
             Double []tmp=new Double[countlist.size()];
             countlist.toArray(tmp);
