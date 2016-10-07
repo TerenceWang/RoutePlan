@@ -44,6 +44,156 @@ public class Map {
             }
         }
     }
+
+    public static double findweight( Map m,ArrayList<double[]> s,int start,int end){
+        int id=m.graph.getFirstNeighbor(start);
+        int count=0;
+        if(id==end){
+            return s.get(start)[count];
+        }
+        while(id!=-1){
+            id = m.graph.getNextNeighbor(start,id);
+            count++;
+            if(id==end){
+                return s.get(start)[count];
+            }
+        }
+        return -1;
+    }
+
+    public static ArrayList<int[][]> generateTrafficFlow(Map m)
+    {
+        ArrayList timeSeriesMapList = new ArrayList<int[][]>();
+        int nodecount = m.graph.getNumOfVertex();
+        int[][] mapDefault = new int[nodecount][nodecount];
+        int[][] timeMap = new int[nodecount][nodecount];
+        int[][] mapNow = new int[nodecount][nodecount];
+        int[][] mapTemp = new int[nodecount][nodecount];
+        int[][] timeStartMap = new int[nodecount][nodecount];
+        for(int i = 0; i < nodecount; ++i)
+            for(int j = 0; j < nodecount; ++j)
+            {
+                timeMap[i][j] = 0;
+                mapNow[i][j] = 0;
+                timeStartMap[i][j] = 0;
+                mapTemp[i][j] = 0;
+                mapDefault[i][j] = m.graph.getEdgeMatrix()[i][j];
+                if (mapDefault[i][j] == Integer.MAX_VALUE)
+                    mapDefault[i][j] = 0;
+            }
+        timeSeriesMapList.add(mapDefault);
+        ArrayList<double[]> probMap = generateegedweigh(m);
+
+        int countflow = 0;
+        while(countflow < 2)
+        {
+            for (int i = 0; i < nodecount; ++i)
+            {
+                Random rand = new Random();
+                int randTemp = rand.nextInt(100);
+                if (randTemp > 95 && countflow < 2)
+                {
+                    int flowTemp = rand.nextInt(400);
+                    flowTemp += 600;
+                    countflow++;
+                    for(int k = 0; k < nodecount;++k) {
+                        int temp = (int)(flowTemp * findweight(m, probMap, i, k));
+                        if (temp < 0)
+                            continue;
+                        mapNow[i][k] += temp;
+                        timeStartMap[i][k] = 1;
+                    }
+                    System.out.println(i);
+                }
+            }
+        }
+        for(int i = 0; i < nodecount; ++i)
+        {
+            for(int j = 0; j < nodecount; ++j)
+            {
+                timeMap[i][j] = mapNow[i][j] * mapDefault[i][j] / 200 + mapDefault[i][j];
+                if (timeMap[i][j] < 0)
+                    System.out.println(i + " " + j + " " + mapNow);
+//                if (timeMap[i][j] == 0)
+//                    timeMap[i][j] = Integer.MAX_VALUE;
+            }
+        }
+
+        timeSeriesMapList.add(timeMap);
+        for(int i = 0; i < nodecount; ++i)
+            for(int j = 0; j < nodecount; ++j)
+            {
+                mapTemp[i][j] = mapNow[i][j];
+                if (mapTemp[i][j] < 100)
+                    mapTemp[i][j] = 0;
+                mapNow[i][j] = 0;
+            }
+
+        for(int timeSeries = 2; timeSeries < 100; ++timeSeries)
+        {
+            for (int i = 0; i < nodecount; ++i)
+            {
+                Random rand = new Random();
+                int randTemp = rand.nextInt(100);
+                if (randTemp == 1)
+                {
+                    int flowTemp = rand.nextInt(300);
+                    flowTemp += 100;
+                    countflow++;
+                    for(int k = 0; k < nodecount;++k) {
+                        int temp = (int)(flowTemp * findweight(m, probMap, i, k));
+                        if (temp < 0)
+                            continue;
+                        mapNow[i][k] += temp;
+                        timeStartMap[i][k] = timeSeries;
+                    }
+                }
+
+                for(int j = 0; j < nodecount; ++j)
+                {
+                    if (timeStartMap[i][j] + timeMap[i][j] >= timeSeries)
+                    {
+                        timeStartMap[i][j] = 0;
+                        for(int k = 0; k < nodecount;++k) {
+                            int temp = (int)(mapTemp[i][j] * findweight(m, probMap, j, k));
+                            if(temp < 0)
+                                continue;
+                            mapNow[j][k] += temp;
+                            if (timeStartMap[i][k] == 0)
+                                timeStartMap[j][k] = timeSeries;
+                        }
+                    }
+                    else
+                        mapNow[i][j] += mapTemp[i][j];
+                }
+
+            }
+            for(int i = 0; i < nodecount; ++i)
+                for(int j = 0; j < nodecount; ++j)
+                {
+                    timeMap[i][j] = mapNow[i][j] * mapDefault[i][j] / 200 + mapDefault[i][j];
+                    if (timeMap[i][j] < 0)
+                        System.out.println(timeSeries + " " + i + " " + j + " " + mapNow[i][j]);
+//                if (timeMap[i][j] == 0)
+//                    timeMap[i][j] = Integer.MAX_VALUE;
+                }
+            timeSeriesMapList.add(timeMap);
+
+            for(int i = 0; i < nodecount; ++i)
+                for(int j = 0; j < nodecount; ++j)
+                {
+                    mapTemp[i][j] = mapNow[i][j];
+                    if (mapTemp[i][j] < 100 )
+                        mapTemp[i][j] = 0;
+                    mapNow[i][j] = 0;
+                }
+        }
+
+
+        return timeSeriesMapList;
+    }
+
+
     public static ArrayList<double[]> generateegedweigh(Map m){
         int nodecount=m.graph.getEdgeMatrix().length;
         int k=5;
@@ -51,13 +201,23 @@ public class Map {
         for (int i = 0; i < nodecount; i++) {
             ArrayList<Double> countlist=new ArrayList<Double>();
             int id=m.graph.getFirstNeighbor(i);
-            if(id!=-1)
-                countlist.add(peredgeweight(k));
+            if(id!=-1){
+                double temp=peredgeweight(k);
+                if(temp<0)
+                    countlist.add(0.0);
+                else
+                    countlist.add(temp);
+            }
 
             while(id!=-1){
                 id=m.graph.getNextNeighbor(i,id);
-                if(id!=-1)
-                    countlist.add(peredgeweight(k));
+                if(id!=-1){
+                    double temp=peredgeweight(k);
+                    if(temp<0)
+                        countlist.add(0.0);
+                    else
+                        countlist.add(temp);
+                }
             }
             Double []tmp=new Double[countlist.size()];
             countlist.toArray(tmp);
@@ -66,6 +226,8 @@ public class Map {
         }
         return result;
     }
+
+
     public static double[] Normalization(Double[] list){
         double sum=0;
         double []result=new double[list.length];
@@ -113,10 +275,15 @@ public class Map {
 //            System.out.println(ss[i]+" ");
 //        }
 
-        ArrayList<double[]> tmp=new ArrayList<>();
-        tmp=generateegedweigh(m);
-        for (int i = 0; i < tmp.get(10).length; i++) {
-            System.out.print(tmp.get(10)[i]+" ");
+        ArrayList<int[][]> tmp = new ArrayList<>();
+        tmp=generateTrafficFlow(m);
+        for (int i = 0; i < 100; i++) {
+            for(int j = 0; j < tmp.get(i).length; ++j) {
+                for(int k = 0; k < tmp.get(i).length; ++k)
+                    System.out.print(tmp.get(i)[j][k] + " ");
+                System.out.println();
+            }
+
         }
         System.out.println();
 
