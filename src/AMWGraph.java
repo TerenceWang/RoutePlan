@@ -52,9 +52,10 @@ public class AMWGraph {
     }
 
     public int[][] getEdgeMatrix(){
-        int[][] result=new int[numOfEdges][numOfEdges];
-        for (int i = 0; i < numOfEdges; i++) {
-            for (int j = 0; j < numOfEdges; j++) {
+        int n=edges.length;
+        int[][] result=new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
                 result[i][j]=edges[i][j];
             }
         }
