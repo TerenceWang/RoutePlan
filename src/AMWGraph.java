@@ -53,7 +53,11 @@ public class AMWGraph {
 
     public int[][] getEdgeMatrix(){
         int[][] result=new int[numOfEdges][numOfEdges];
-        result=edges;
+        for (int i = 0; i < numOfEdges; i++) {
+            for (int j = 0; j < numOfEdges; j++) {
+                result[i][j]=edges[i][j];
+            }
+        }
         return result;
     }
 
