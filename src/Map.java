@@ -78,8 +78,8 @@ public class Map {
                 timeStartMap[i][j] = 0;
                 mapTemp[i][j] = 0;
                 mapDefault[i][j] = m.graph.getEdgeMatrix()[i][j];
-                if (mapDefault[i][j] == Integer.MAX_VALUE)
-                    mapDefault[i][j] = 0;
+//                if (mapDefault[i][j] == Integer.MAX_VALUE)
+//                    mapDefault[i][j] = 0;
             }
         timeSeriesMapList.add(mapDefault);
         ArrayList<double[]> probMap = generateegedweigh(m);
@@ -115,9 +115,12 @@ public class Map {
                 for(int j = 0; j < nodecount; ++j)
                 {
                     timeMap[i][j] = mapNow[i][j] * mapDefault[i][j] /150 + mapDefault[i][j];
-                    timeMapOut[i][j] = timeMap[i][j];
-                    if (timeMap[i][j] > 100)
-                        System.out.println(1 + " " + i + " " + j + " " + timeMap[i][j]);
+                    if(timeMap[i][j]==0)
+                        timeMapOut[i][j]=Integer.MAX_VALUE;
+                    else
+                        timeMapOut[i][j] = timeMap[i][j];
+//                    if (timeMap[i][j] > 100)
+//                        System.out.println(1 + " " + i + " " + j + " " + timeMap[i][j]);
 //                if (timeMap[i][j] == 0)
 //                    timeMap[i][j] = Integer.MAX_VALUE;
                 }
@@ -178,7 +181,10 @@ public class Map {
                     for(int j = 0; j < nodecount; ++j)
                     {
                         timeMap[i][j] = mapNow[i][j] * mapDefault[i][j]/150 + mapDefault[i][j];
-                        timeMapOut[i][j] = timeMap[i][j];
+                        if(timeMap[i][j]==0)
+                            timeMapOut[i][j]=Integer.MAX_VALUE;
+                        else
+                            timeMapOut[i][j] = timeMap[i][j];
 //                    if (mapNow[i][j] > 0)
 //                        System.out.println(timeSeries + " " + i + " " + j + " " + mapNow[i][j] * mapDefault[i][j] / 200);
 //                if (timeMap[i][j] == 0)
@@ -266,12 +272,11 @@ public class Map {
         m.readmap("data/nodenumber_10_edgenumber_327.map");
         int [][]s=m.graph.getEdgeMatrix();
         int start=5;
-        int end=96;
+        int end=40;
 
 
-//        Dijsktra di=new Dijsktra();
-//        di.dodijsktra(s,start);
-//        di.getpath(end);
+        Dijsktra di=new Dijsktra();
+        di.dodijsktra(s,start);
 //
 //
 //        SPFA sp=new SPFA();
@@ -285,24 +290,29 @@ public class Map {
 
         ArrayList<int[][]> tmp = new ArrayList<>();
         tmp=generateTrafficFlow(m);
-//            for(int j = 0; j < tmp.get(1).length; ++j) {
-//                for(int k = 0; k < tmp.get(1).length; ++k)
-//                    System.out.print(tmp.get(1)[j][k] + " ");
-//                System.out.println();
-//            }
 
-        for (int i = 0; i < 2; i++) {
-            for(int j = 0; j < tmp.get(i).length; ++j) {
-                for(int k = 0; k < tmp.get(i).length; ++k)
-                    System.out.print(tmp.get(i)[j][k] + " ");
-//                    if(tmp.get(i)[j][k] > 100)
-//                        System.out.println(i + " " + j + " " + k);
-                System.out.println();
+        RepeatDijsktra repeatDijsktra=new RepeatDijsktra(tmp,start,end);
 
-            }
-            System.out.println();
+        repeatDijsktra.doRepeatDijsktra();
+        for (int i = 0; i < repeatDijsktra.getpath().length; i++) {
+            System.out.println(repeatDijsktra.getpath()[i]);
         }
-        System.out.println();
+        System.out.println("============");
+        for (int i = 0; i < di.getpath(end).length; i++) {
+            System.out.println(di.getpath(end)[i]);
+        }
+        System.out.println("===============");
+        System.out.println(repeatDijsktra.getTimecount());
+        System.out.println(di.getpathlength(end));
+//        for (int i = 0; i < 2; i++) {
+//            for(int j = 0; j < tmp.get(i).length; ++j) {
+//                for(int k = 0; k < tmp.get(i).length; ++k)
+//                    System.out.print(tmp.get(i)[j][k] + " ");
+//                System.out.println();
+//
+//            }
+//            System.out.println();
+//        }
 
     }
 }
