@@ -70,6 +70,14 @@ public class Map {
         int[][] mapNow = new int[nodecount][nodecount];
         int[][] mapTemp = new int[nodecount][nodecount];
         int[][] timeStartMap = new int[nodecount][nodecount];
+        int probNewFlow = 10; // Probability of setting up a new traffic flow(1/prob)
+        int baseNewFlow = 500; // Basic size of new traffic flow
+        int addSizeNewFlow = 500; // Random size add to the new traffic flow (1 - addSizeNewFlow)
+        int countInitFlow = 3; // How many flows set up while init
+        int baseInitFlow = 1600; // Basic size while init traffic flow
+        int addSizeInitFlow = 400; // Random size add to the init traffic flows (1 - addSizeInitFlow)
+        int timeFunctionConst = 150; // Const in time function
+        int countflow = 0;
         for(int i = 0; i < nodecount; ++i)
             for(int j = 0; j < nodecount; ++j)
             {
@@ -84,17 +92,16 @@ public class Map {
         timeSeriesMapList.add(mapDefault);
         ArrayList<double[]> probMap = generateegedweigh(m);
 
-        int countflow = 0;
-        while(countflow < 2)
+        while(countflow < countInitFlow)
         {
             for (int i = 0; i < nodecount; ++i)
             {
                 Random rand = new Random();
                 int randTemp = rand.nextInt(100);
-                if (randTemp > 95 && countflow < 2)
+                if (randTemp > 95 && countflow < countInitFlow)
                 {
-                    int flowTemp = rand.nextInt(400);
-                    flowTemp += 600;
+                    int flowTemp = rand.nextInt(addSizeInitFlow);
+                    flowTemp += baseInitFlow;
                     countflow++;
                     for(int k = 0; k < nodecount;++k) {
                         int temp = (int)(flowTemp * findweight(m, probMap, i, k));
@@ -114,7 +121,7 @@ public class Map {
             {
                 for(int j = 0; j < nodecount; ++j)
                 {
-                    timeMap[i][j] = mapNow[i][j] * mapDefault[i][j] /150 + mapDefault[i][j];
+                    timeMap[i][j] = mapNow[i][j] * mapDefault[i][j] / timeFunctionConst + mapDefault[i][j];
                     if(timeMap[i][j]==0)
                         timeMapOut[i][j]=Integer.MAX_VALUE;
                     else
@@ -141,11 +148,11 @@ public class Map {
             for (int i = 0; i < nodecount; ++i)
             {
                 Random rand = new Random();
-                int randTemp = rand.nextInt(100);
+                int randTemp = rand.nextInt(probNewFlow);
                 if (randTemp == 1)
                 {
-                    int flowTemp = rand.nextInt(300);
-                    flowTemp += 100;
+                    int flowTemp = rand.nextInt(addSizeNewFlow);
+                    flowTemp += baseNewFlow;
                     countflow++;
                     for(int k = 0; k < nodecount;++k) {
                         int temp = (int)(flowTemp * findweight(m, probMap, i, k));
@@ -180,7 +187,7 @@ public class Map {
                 for(int i = 0; i < nodecount; ++i)
                     for(int j = 0; j < nodecount; ++j)
                     {
-                        timeMap[i][j] = mapNow[i][j] * mapDefault[i][j]/150 + mapDefault[i][j];
+                        timeMap[i][j] = mapNow[i][j] * mapDefault[i][j] / timeFunctionConst + mapDefault[i][j];
                         if(timeMap[i][j]==0)
                             timeMapOut[i][j]=Integer.MAX_VALUE;
                         else
@@ -303,6 +310,7 @@ public class Map {
         }
         System.out.println("===============");
         System.out.println(repeatDijsktra.getTimecount());
+        System.out.println(repeatDijsktra.getpathlength());
         System.out.println(di.getpathlength(end));
 //        for (int i = 0; i < 2; i++) {
 //            for(int j = 0; j < tmp.get(i).length; ++j) {
