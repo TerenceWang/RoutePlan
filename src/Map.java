@@ -47,7 +47,6 @@ public class Map {
 
 
 
-
     public static void main(String[] args) {
         Map m=new Map();
         m.readmap("data/nodenumber_10_edgenumber_327.map");
@@ -56,22 +55,32 @@ public class Map {
         int end=40;
 
 
-        Dijsktra di=new Dijsktra();
-        di.dodijsktra(s,start);
+        Dijsktra dijsktra=new Dijsktra();
+        dijsktra.dodijsktra(s,start);
+
+        Floyd floyd=new Floyd();
+        floyd.dofloyd(s);
+
 //
 //
 //        SPFA sp=new SPFA();
 //        sp.dospfa(s,start);
-//        Floyd fl=new Floyd();
-//        fl.dofloyd(s);
+
 //        int ss[]=fl.getpath(start,end);
 //        for (int i = 0; i < ss.length; i++) {
 //            System.out.println(ss[i]+" ");
 //        }
 
+
+
+
         TrafficFlow trafficFlow=new TrafficFlow(m);
         ArrayList<int[][]> tmp = new ArrayList<>();
         tmp=trafficFlow.generateTrafficFlow();
+
+
+        DStarLite dStarLite=new DStarLite(m,floyd,tmp,start,end);
+        dStarLite.doDStarLite();
 
         RepeatDijsktra repeatDijsktra=new RepeatDijsktra(tmp,start,end);
 
@@ -80,13 +89,19 @@ public class Map {
             System.out.println(repeatDijsktra.getpath()[i]);
         }
         System.out.println("============");
-        for (int i = 0; i < di.getpath(end).length; i++) {
-            System.out.println(di.getpath(end)[i]);
+        for (int i = 0; i < dijsktra.getpath(end).length; i++) {
+            System.out.println(dijsktra.getpath(end)[i]);
         }
         System.out.println("===============");
+        for (int i = 0; i < dStarLite.getpath().length; i++) {
+            System.out.println(dStarLite.getpath()[i]);
+        }
+        System.out.println("===============");
+        System.out.println(dStarLite.getTimecount());
+        System.out.println(dStarLite.getpathlength());
         System.out.println(repeatDijsktra.getTimecount());
         System.out.println(repeatDijsktra.getpathlength());
-        System.out.println(di.getpathlength(end));
+
 //        for (int i = 0; i < 2; i++) {
 //            for(int j = 0; j < tmp.get(i).length; ++j) {
 //                for(int k = 0; k < tmp.get(i).length; ++k)
