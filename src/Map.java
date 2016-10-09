@@ -72,36 +72,76 @@ public class Map {
 //        }
 
 
+        int startimecount=0;
+        int stardistance=0;
+        int dijtime=0;
+        int dijdistance=0;
+        long dijruntime=0;
+        long starruntime=0;
+        int count=0;
 
+        BufferedWriter out= null;
+        try {
+            out = new BufferedWriter(new FileWriter("data/500-result.txt",true));
+        for (int ii= 0; ii < 500; ++ii)
+        {
+            TrafficFlow trafficFlow=new TrafficFlow(m);
+            ArrayList<int[][]> tmp = new ArrayList<>();
+            tmp=trafficFlow.generateTrafficFlow();
 
-        TrafficFlow trafficFlow=new TrafficFlow(m);
-        ArrayList<int[][]> tmp = new ArrayList<>();
-        tmp=trafficFlow.generateTrafficFlow();
+            DStarLite dStarLite=new DStarLite(m,floyd,tmp,start,end);
+            long time3=System.currentTimeMillis();
+            int res=dStarLite.doDStarLite();
+            if(res<0)
+                continue;
+            count++;
+            long time4=System.currentTimeMillis();
 
+            RepeatDijsktra repeatDijsktra=new RepeatDijsktra(tmp,start,end);
+            long time1=System.currentTimeMillis();
+            repeatDijsktra.doRepeatDijsktra();
+            long time2=System.currentTimeMillis();
 
-        DStarLite dStarLite=new DStarLite(m,floyd,tmp,start,end);
-        dStarLite.doDStarLite();
+            dijruntime+=(time2-time1);
+            starruntime+=(time4-time3);
 
-        RepeatDijsktra repeatDijsktra=new RepeatDijsktra(tmp,start,end);
+//            for (int i = 0; i < repeatDijsktra.getpath().length; i++) {
+//                System.out.println(repeatDijsktra.getpath()[i]);
+//            }
+//            System.out.println("============");
+//            for (int i = 0; i < dijsktra.getpath(end).length; i++) {
+//                System.out.println(dijsktra.getpath(end)[i]);
+//            }
+//            System.out.println("===============");
+//            for (int i = 0; i < dStarLite.getpath().length; i++) {
+//                System.out.println(dStarLite.getpath()[i]);
+//            }
+            System.out.println("===============");
+            System.out.println(dStarLite.getTimecount() + " " + repeatDijsktra.getTimecount());
+            System.out.println(dStarLite.getpathlength() + " " + repeatDijsktra.getpathlength());
+            System.out.println("===============");
 
-        repeatDijsktra.doRepeatDijsktra();
-        for (int i = 0; i < repeatDijsktra.getpath().length; i++) {
-            System.out.println(repeatDijsktra.getpath()[i]);
+            startimecount+=dStarLite.getTimecount();
+            stardistance+=dStarLite.getpathlength();
+            dijdistance+=repeatDijsktra.getpathlength();
+            dijtime+=repeatDijsktra.getTimecount();
+            out.write(dStarLite.getTimecount()+" "+dStarLite.getpathlength()+" "+repeatDijsktra.getTimecount()+" "+repeatDijsktra.getpathlength());
+            out.newLine();
+//            System.out.println(dStarLite.getTimecount());
+//            System.out.println(dStarLite.getpathlength());
+//            System.out.println(repeatDijsktra.getTimecount());
+//            System.out.println(repeatDijsktra.getpathlength());
+
         }
-        System.out.println("============");
-        for (int i = 0; i < dijsktra.getpath(end).length; i++) {
-            System.out.println(dijsktra.getpath(end)[i]);
-        }
-        System.out.println("===============");
-        for (int i = 0; i < dStarLite.getpath().length; i++) {
-            System.out.println(dStarLite.getpath()[i]);
-        }
-        System.out.println("===============");
-        System.out.println(dStarLite.getTimecount());
-        System.out.println(dStarLite.getpathlength());
-        System.out.println(repeatDijsktra.getTimecount());
-        System.out.println(repeatDijsktra.getpathlength());
+            out.close();
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("count: "+count);
+        System.out.println(dijdistance+" "+dijtime);
+        System.out.println(stardistance+" "+startimecount);
+        System.out.println(dijruntime+" "+starruntime);
 //        for (int i = 0; i < 2; i++) {
 //            for(int j = 0; j < tmp.get(i).length; ++j) {
 //                for(int k = 0; k < tmp.get(i).length; ++k)

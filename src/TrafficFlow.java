@@ -84,7 +84,7 @@ public class TrafficFlow {
         int countInitFlow = 3; // How many flows set up while init
         int baseInitFlow = 1600; // Basic size while init traffic flow
         int addSizeInitFlow = 400; // Random size add to the init traffic flows (1 - addSizeInitFlow)
-        int timeFunctionConst = 150; // Const in time function
+        int timeFunctionConst = 200; // Const in time function
         int countflow = 0;
         for(int i = 0; i < nodecount; ++i)
             for(int j = 0; j < nodecount; ++j)
@@ -117,9 +117,9 @@ public class TrafficFlow {
                             continue;
                         mapNow[i][k] += temp;
                         timeStartMap[i][k] = 1;
-                        System.out.println(i + " " + k + " " + temp);
+//                        System.out.println(i + " " + k + " " + temp);
                     }
-                    System.out.println(i);
+//                    System.out.println(i);
                 }
             }
         }
@@ -151,7 +151,7 @@ public class TrafficFlow {
                 mapNow[i][j] = 0;
             }
 
-        for(int timeSeries = 2; timeSeries < 100; ++timeSeries)
+        for(int timeSeries = 2; timeSeries < 800; ++timeSeries)
         {
             for (int i = 0; i < nodecount; ++i)
             {

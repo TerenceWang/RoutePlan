@@ -24,7 +24,7 @@ public class RepeatDijsktra {
         int now=dj.getpath(end)[1];
         timecount+=timeSeriesMapList.get(0)[start][now];
         distancecount+=timeSeriesMapList.get(0)[start][now];
-        System.out.println("lalal "+distancecount);
+//        System.out.println("lalal "+distancecount);
         pathcount.add(start);
         pathcount.add(now);
         while(now!=end){
