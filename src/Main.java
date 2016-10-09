@@ -12,9 +12,12 @@ public class Main {
         di.dodijsktra(s,start);
         int []a=fl.getpath(start,end);
         int []a2=di.getpath(end);
+        Astar astar=new Astar(fl);
+        astar.doastar(s,start,end);
+        int []ss = astar.getpath(start,end);
         int result=0;
-        for (int i = 0; i < a.length; i++) {
-            System.out.print(a[i]+" ");
+        for (int i = 0; i < ss.length; i++) {
+            System.out.print(ss[i]+" ");
         }
         System.out.println();
         for (int i = 0; i < a2.length; i++) {

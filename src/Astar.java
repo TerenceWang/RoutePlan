@@ -9,7 +9,7 @@ public class Astar {
     Astar (Floyd shortpath){
     	this.floyd=shortpath;
     } 
-public void doastar(int[][] edge, int start, int end){  
+	public void doastar(int[][] edge, int start, int end){
     	/**********************************************************
     	 *  Definition & Initiation
     	 */
@@ -61,37 +61,38 @@ public void doastar(int[][] edge, int start, int end){
     			   tempmin=f[i];
     			   currentnode=i;
     		   }
-    	   }
+    	   	}
    //remove from open list and add to close list
-	    	  opennum--;
-	    	  closenum++;
-	    	  visited[currentnode] = 0;
+		   opennum--;
+		   closenum++;
+		   visited[currentnode] = 0;
    //for adjacent nodes
 	    	  
-	    	 for(int i=0;i<vertexnumber;i++){
-	    	   	if(visited[i]!=0 && edgetmp[currentnode][i]<Integer.MAX_VALUE ){
-	    	   		if(visited[i]==-1){					// if the node is not in Open/Close_list
-	    	   			visited[i]=1;					// Put the node in open_list
-	    	   			opennum++;
-	    					  
-	    	   			g[i]  = edge[currentnode][i] + gpath;	       		            // Calculate its g[] value
-	    	   		    gpath = g[i];
+		   for(int i=0;i<vertexnumber;i++){
+
+			   if(visited[i]!=0 && edgetmp[currentnode][i]<Integer.MAX_VALUE ){
+				   if(visited[i]==-1){					// if the node is not in Open/Close_list
+					   visited[i]=1;					// Put the node in open_list
+					   opennum++;
+
+					   g[i]  = edge[currentnode][i] + gpath;	       		            // Calculate its g[] value
+					   gpath = g[i];
 	    					   
-	    	   			h[i]=floyd.getpathlength(currentnode,i);					// Calculate its h[] value
-	    	   			f[i]=g[i]+h[i];
-	    	   			}//end if(visited[i]==-1)
+					   h[i]=floyd.getpathlength(i,end);					// Calculate its h[] value
+					   f[i]=g[i]+h[i];
+				   }//end if(visited[i]==-1)
 	    	   				
-	    	   		 if(visited[i]==1){					//if the node is in Open_list, begin to compare
-	    	   			g[i]  = edge[currentnode][i] + gpath;	       		            // Calculate its g[] value
-	    	   			h[i]=floyd.getpathlength(currentnode,i);					// Calculate its h[] value
-	    	   			newf=g[i]+h[i];
-	    	   		    if(f[i]>newf){
-	    	   		    	f[i]=newf;
-	    	   				}
-	    	   		 	}//end if(visited[i]==1)
-	    				   
-	    	   		}
-	    	 	}//end for
+				   if(visited[i]==1){					//if the node is in Open_list, begin to compare
+					   g[i]  = edge[currentnode][i] + gpath;	       		            // Calculate its g[] value
+					   h[i]=floyd.getpathlength(i,end);					// Calculate its h[] value
+					   newf=g[i]+h[i];
+					   if(f[i]>newf){
+						   f[i]=newf;
+					   }
+				   }//end if(visited[i]==1)
+
+			   }
+		   }//end for
 
        } // end while
        
