@@ -1,79 +1,27 @@
 
 import java.util.*;
 
+import javax.management.OperationsException;
+
+import org.omg.CORBA.Current;
+
 public class Astar {
 	ArrayList<Integer> Estimate = new ArrayList<Integer>();  
     private int[] shortestpath;
     private Floyd floyd;
-    private Map map;
-    Astar (Floyd shortpath, Map map){
+
+    private int pathlength;
+    Astar (Floyd shortpath){
     	this.floyd=shortpath;
-        this.map=map;
+        pathlength=0;
     }
-//    public void doastar(int [][]edge , int  start ,int end){
-//        PriorityQueue<Integer> openlist=new PriorityQueue<Integer>();
-//        PriorityQueue<Integer> closelist=new PriorityQueue<Integer>();
-//        openlist.add(start);
-//        int []g=new int[map.nodetotal];
-//        int []h=new int[map.nodetotal];
-//        int []f=new int[map.nodetotal];
-//        int []parent=new int[map.nodetotal];
-//        for (int i = 0; i < map.nodetotal; i++) {
-//            g[i]=Integer.MAX_VALUE;
-//            h[i]=Integer.MAX_VALUE;
-//            f[i]=Integer.MAX_VALUE;
-//            parent[i]=i;
-//        }
-//        g[start]=0;
-//        f[start]=0;
-//        while (openlist.size()>0){
-//            int currentnode=openlist.poll();
-//            if(end==currentnode)
-//                break;
-//            int []succ=getSucc(currentnode);
-//            for (int i = 0; i < succ.length; i++) {
-//                boolean inopen;
-//                if(closelist.contains(succ[i]))
-//                    continue;
-//                inopen=openlist.contains(currentnode);
-//                int tempg;
-//                if(g[currentnode]==Integer.MAX_VALUE)
-//                    tempg=Integer.MAX_VALUE;
-//                tempg=g[currentnode]+edge[currentnode][succ[i]];
-//                if(inopen && tempg>g[succ[i]])
-//                    continue;
-//                parent[succ[i]]=currentnode;
-//                if(inopen){
-//                    g[succ[i]]=tempg;
-//                }
-//                else {
-//                    g[succ[i]]=tempg;
-//                    openlist.add(succ[i]);
-//                }
-//            }
-//            closelist.add(currentnode);
-//        }
-//    }
-
-
-    private int[] getSucc(int u){
-        ArrayList<Integer> t=new ArrayList<Integer>();
-        int id=map.graph.getFirstNeighbor(u);
-        t.add(id);
-        while (id!=-1){
-            id=map.graph.getNextNeighbor(u,id);
-            if(id!=-1){
-                t.add(id);
-            }
-        }
-        int []s=new int[t.size()];
-        for (int i = 0; i < s.length; i++) {
-            s[i]=t.get(i);
-        }
-        return s;
-    }
-
 	public void doastar(int[][] edge, int start, int end){
+		
+		   
+        
+		
+		
+		
     	/**********************************************************
     	 *  Definition & Initiation
     	 */
@@ -91,16 +39,14 @@ public class Astar {
         }
         f[start]=0;
         g[start]=0;
-        int gpath = 0;// for function  g[]
         int newf = 0;
         
-        int[] visited = new int[vertexnumber];//Not in both open or close list
-        for(int i=0;i<vertexnumber;i++){
-        	visited[i]=-1;//Not in both open or close list
-        }
-        visited[start] = 1;// In open list
-        int opennum=1;// Number of noses in Open list
-        int closenum=0;// Number of noses in Close list (Why not used?)
+        ArrayList<Integer> openSet = new ArrayList<Integer>();
+
+        ArrayList<Integer> closedSet = new ArrayList<Integer>();
+        int[] gValue = new int[vertexnumber];
+        openSet.add(start);
+        
         
         int [][] edgetmp=new int[vertexnumber][vertexnumber];
         
@@ -112,69 +58,77 @@ public class Astar {
     	/**
     	 *  Definition & Initiation
     	 ***************************************************************************/
+        
+        /***************************************************************************
+         * Main Process  
+         */                   // While open list has some nodes in it 
+       while(openSet.size()!=0){		
+    	   
 
-    	/***************************************************************************
-         * Main Process
-         ***************************************************************************/
-        // While open list has some nodes in it
-      
-       while(opennum!=0 && visited[end]!=0 ){							    
-    	   	int tempmin=0,currentnode=0;
-            //get the node with min-f[i] in the Openlist
-    	   	for(int i=0;i<opennum;i++){
-    	   		if(tempmin>f[i]){
-    			   tempmin=f[i];
-    			   currentnode=i;
-    		   }
-    	   	}
-            //remove from open list and add to close list
-		    opennum--;
-		    closenum++;
-		    visited[currentnode] = 0;
-            //for adjacent nodes
-	    	  
-		   for(int i=0;i<vertexnumber;i++){
+	       int currentnode = getMinFvalue(openSet, f);
+	      
+	       openSet.remove(openSet.indexOf(currentnode));
+	       closedSet.add(currentnode);
+    	   	  
 
-			   if(visited[i]!=0 && edgetmp[currentnode][i]<Integer.MAX_VALUE ){
-				   if(visited[i]==-1){					// if the node is not in Open/Close_list
-					   visited[i]=1;					// Put the node in open_list
-					   opennum++;
+   //for adjacent nodes
+		   ArrayList<Integer> adjacentNodes = getAdjacentNodes(currentnode, vertexnumber, edgetmp);
+		   for(int adj : adjacentNodes){
+			   if(closedSet.contains(adj))
+				   continue;
+			   if(!openSet.contains(adj)){
+				 
+				   if(currentnode == start){
+					   g[adj]  = edge[start][adj];
+					   gValue[adj] = g[adj];
+				   }else{
+					   g[adj]= gValue[adj]+ edge[currentnode][adj];
+					   gValue[adj] = g[adj];
+				   }
 
-                       if(gpath==Integer.MAX_VALUE)
-                           g[i]=Integer.MAX_VALUE;
-                       else
-                           g[i]  = edge[currentnode][i] + gpath;	       		            // Calculate its g[] value
-                       gpath = g[i];
-	    					   
-					   h[i]=floyd.getpathlength(i,end);					// Calculate its h[] value
-                       if(g[i]==Integer.MAX_VALUE||h[i]==Integer.MAX_VALUE)
-                           f[i]=Integer.MAX_VALUE;
-                       else
-                           f[i]=g[i]+h[i];
 
-				   }//end if(visited[i]==-1)
-	    	   				
-				   if(visited[i]==1){					//if the node is in Open_list, begin to compare
-					   g[i]  = edge[currentnode][i] + gpath;	       		            // Calculate its g[] value
-					   h[i]=floyd.getpathlength(i,end);					// Calculate its h[] value
-                       if(h[i]==Integer.MAX_VALUE||g[i]==Integer.MAX_VALUE)
-                           newf=Integer.MAX_VALUE;
-                       else
-                           newf=g[i]+h[i];
-                       newf=g[i]+h[i];
-					   if(f[i]>newf){
-						   f[i]=newf;
-					   }
-				   }//end if(visited[i]==1)
 
+                   int []s=floyd.getpath(adj,end);
+                   int result=0;
+                   for (int i = 0; i < s.length-1; i++) {
+                        result+=edge[s[i]][s[i+1]];
+                   }
+//                   h[adj]=floyd.getpathlength(adj,end);
+                   h[adj]=result;
+
+
+                   f[adj]=h[adj]+g[adj];
+                   openSet.add(adj); // add node to openList
+			   }else{
+				   g[adj]= gValue[adj]+ edge[currentnode][adj];     		            // Calculate its g[] value
+
+                   int []s=floyd.getpath(adj,end);
+                   int result=0;
+                   for (int i = 0; i < s.length-1; i++) {
+                       result+=edge[s[i]][s[i+1]];
+                   }
+                   h[adj]=result;
+//                   h[adj]=floyd.getpathlength(adj,end);					// Calculate its h[] value
+
+                   newf=g[adj]+h[adj];
+				   if(f[adj]>newf){
+					   f[adj]=newf;
+				   }
 			   }
-		   }//end for
-
+		   }
+		   
+	    	  
        } // end while
        
-       for (int i = 0; i < closenum; i++) {
-    	   Estimate.add(f[i]);
+       for (int node : closedSet) {
+    	   Estimate.add(node);
+    	   if(node==end)
+    		   break;
        }
+        for (int i = 0; i < Estimate.size()-1; i++) {
+            pathlength+=edge[Estimate.get(i)][Estimate.get(i+1)];
+        }
+
     }//end func.doastar
     
     public int[] getpath(int start, int end){
@@ -183,12 +137,34 @@ public class Astar {
     		result[i]=Estimate.get(i);
     	}
     	
-    	Arrays.sort(result);   
     	return result;
     }
-    
+
     
     public int getpathlength(int end){
-        return shortestpath[end];
+        return pathlength;
+    }
+    public int getMinFvalue(ArrayList<Integer> openSet, int[] f){
+	   	int tempmin=Integer.MAX_VALUE,currentnode=0;
+	   	for(int i : openSet){
+	   		if(tempmin>=f[i]){
+			   tempmin=f[i];
+			   currentnode=i;
+			   
+			  
+		   }
+	   	}
+    	return currentnode;
+    }
+    public ArrayList<Integer> getAdjacentNodes(int currentnode, int vertexnumber, int[][] edgetmp){
+    	ArrayList<Integer> adjs = new ArrayList<Integer>();
+    	for(int i=0;i<vertexnumber;i++){
+    		if(edgetmp[currentnode][i]<Integer.MAX_VALUE){
+    		    adjs.add(i);
+    		}
+
+    	}
+		return adjs;
+    	
     }
 }

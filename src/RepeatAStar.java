@@ -1,36 +1,37 @@
 import java.util.ArrayList;
 
 /**
- * Created by terence on 10/8/16.
+ * Created by terence on 10/10/16.
  */
-public class RepeatDijsktra {
+public class RepeatAStar {
     private ArrayList<int[][]> timeSeriesMapList;
-    private int start;
-    private int end;
+    private Floyd floyd;
+    private int start,end;
     private int timecount;
-    private int distancecount;
     private ArrayList<Integer> pathcount;
-    RepeatDijsktra(ArrayList<int[][]> timeSeriesMapList,int start, int end){
+    private int distancecount;
+    RepeatAStar(ArrayList<int[][]> timeSeriesMapList,Floyd floyd,int start,int end){
         this.timeSeriesMapList=timeSeriesMapList;
+        this.floyd=floyd;
         this.start=start;
         this.end=end;
-        this.timecount=0;
-        this.distancecount=0;
-        this.pathcount=new ArrayList<Integer>();
+        pathcount=new ArrayList<Integer>();
+        timecount=0;
+        distancecount=0;
     }
-    public int doRepeatDijsktra(){
-        Dijsktra dj=new Dijsktra();
-        dj.dodijsktra(timeSeriesMapList.get(0),start);
-        int now=dj.getpath(end)[1];
+    public int dorepeatastar(){
+        Astar astar=new Astar(floyd);
+        astar.doastar(timeSeriesMapList.get(0),start,end);
+        int now=astar.getpath(start,end)[1];
         timecount+=timeSeriesMapList.get(0)[start][now];
         distancecount+=timeSeriesMapList.get(0)[start][now];
 //        System.out.println("lalal "+distancecount);
         pathcount.add(start);
         pathcount.add(now);
         while(now!=end){
-            Dijsktra djj=new Dijsktra();
-            djj.dodijsktra(timeSeriesMapList.get(timecount),now);
-            int temp=djj.getpath(end)[1];
+            Astar astar1=new Astar(floyd);
+            astar1.doastar(timeSeriesMapList.get(timecount),now,end);
+            int temp=astar1.getpath(now,end)[1];
             timecount+=timeSeriesMapList.get(timecount)[now][temp];
             if(timecount>=timeSeriesMapList.size())
                 return -1;
@@ -53,5 +54,4 @@ public class RepeatDijsktra {
     public int getTimecount(){
         return timecount;
     }
-
 }
