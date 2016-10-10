@@ -6,8 +6,8 @@ public class Main {
         Map m=new Map();
         m.readmap("data/nodenumber_2500_edgenumber_8907.map");
         int [][]s=m.graph.getEdgeMatrix();
-//        Floyd fl=new Floyd();
-//        fl.dofloyd(s);
+        Floyd fl=new Floyd();
+        fl.dofloyd(s);
         Dijsktra di=new Dijsktra();
         di.dodijsktra(s,start);
         int []a = fl.getpath(start,end);

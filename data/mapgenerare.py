@@ -1,5 +1,5 @@
 import random
-nodenumber_line=50  # node per line
+nodenumber_line=30  # node per line
 nodenumber_total=nodenumber_line*nodenumber_line
 edge_weight=10      # max weight of a single edge
 edgenumber=nodenumber_line*(nodenumber_line-1)*2*2

@@ -33,7 +33,7 @@ public class RepeatDijsktra {
             int temp=djj.getpath(end)[1];
             timecount+=timeSeriesMapList.get(timecount)[now][temp];
             if(timecount<=timeSeriesMapList.size())
-                return 1;
+                return -1;
             distancecount+=timeSeriesMapList.get(0)[now][temp];
             pathcount.add(temp);
             now=temp;
