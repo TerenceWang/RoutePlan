@@ -83,7 +83,7 @@ public class Map {
         BufferedWriter out= null;
         try {
             out = new BufferedWriter(new FileWriter("data/500-result.txt",true));
-        for (int ii= 0; ii < 2; ++ii)
+        for (int ii= 0; ii < 500; ++ii)
         {
             TrafficFlow trafficFlow=new TrafficFlow(m);
             ArrayList<int[][]> tmp = new ArrayList<>();
