@@ -5,10 +5,71 @@ public class Astar {
 	ArrayList<Integer> Estimate = new ArrayList<Integer>();  
     private int[] shortestpath;
     private Floyd floyd;
-    
-    Astar (Floyd shortpath){
+    private Map map;
+    Astar (Floyd shortpath, Map map){
     	this.floyd=shortpath;
-    } 
+        this.map=map;
+    }
+//    public void doastar(int [][]edge , int  start ,int end){
+//        PriorityQueue<Integer> openlist=new PriorityQueue<Integer>();
+//        PriorityQueue<Integer> closelist=new PriorityQueue<Integer>();
+//        openlist.add(start);
+//        int []g=new int[map.nodetotal];
+//        int []h=new int[map.nodetotal];
+//        int []f=new int[map.nodetotal];
+//        int []parent=new int[map.nodetotal];
+//        for (int i = 0; i < map.nodetotal; i++) {
+//            g[i]=Integer.MAX_VALUE;
+//            h[i]=Integer.MAX_VALUE;
+//            f[i]=Integer.MAX_VALUE;
+//            parent[i]=i;
+//        }
+//        g[start]=0;
+//        f[start]=0;
+//        while (openlist.size()>0){
+//            int currentnode=openlist.poll();
+//            if(end==currentnode)
+//                break;
+//            int []succ=getSucc(currentnode);
+//            for (int i = 0; i < succ.length; i++) {
+//                boolean inopen;
+//                if(closelist.contains(succ[i]))
+//                    continue;
+//                inopen=openlist.contains(currentnode);
+//                int tempg;
+//                if(g[currentnode]==Integer.MAX_VALUE)
+//                    tempg=Integer.MAX_VALUE;
+//                tempg=g[currentnode]+edge[currentnode][succ[i]];
+//                if(inopen && tempg>g[succ[i]])
+//                    continue;
+//                parent[succ[i]]=currentnode;
+//                if(inopen){
+//                    g[succ[i]]=tempg;
+//                }
+//                else {
+//                    g[succ[i]]=tempg;
+//                    openlist.add(succ[i]);
+//                }
+//            }
+//            closelist.add(currentnode);
+//        }
+//    }
+    private int[] getSucc(int u){
+        ArrayList<Integer> t=new ArrayList<Integer>();
+        int id=map.graph.getFirstNeighbor(u);
+        t.add(id);
+        while (id!=-1){
+            id=map.graph.getNextNeighbor(u,id);
+            if(id!=-1){
+                t.add(id);
+            }
+        }
+        int []s=new int[t.size()];
+        for (int i = 0; i < s.length; i++) {
+            s[i]=t.get(i);
+        }
+        return s;
+    }
 	public void doastar(int[][] edge, int start, int end){
     	/**********************************************************
     	 *  Definition & Initiation
@@ -75,17 +136,28 @@ public class Astar {
 					   visited[i]=1;					// Put the node in open_list
 					   opennum++;
 
-					   g[i]  = edge[currentnode][i] + gpath;	       		            // Calculate its g[] value
-					   gpath = g[i];
+                       if(gpath==Integer.MAX_VALUE)
+                           g[i]=Integer.MAX_VALUE;
+                       else
+                           g[i]  = edge[currentnode][i] + gpath;	       		            // Calculate its g[] value
+                       gpath = g[i];
 	    					   
 					   h[i]=floyd.getpathlength(i,end);					// Calculate its h[] value
-					   f[i]=g[i]+h[i];
+                       if(g[i]==Integer.MAX_VALUE||h[i]==Integer.MAX_VALUE)
+                           f[i]=Integer.MAX_VALUE;
+                       else
+                           f[i]=g[i]+h[i];
+
 				   }//end if(visited[i]==-1)
 	    	   				
 				   if(visited[i]==1){					//if the node is in Open_list, begin to compare
 					   g[i]  = edge[currentnode][i] + gpath;	       		            // Calculate its g[] value
 					   h[i]=floyd.getpathlength(i,end);					// Calculate its h[] value
-					   newf=g[i]+h[i];
+                       if(h[i]==Integer.MAX_VALUE||g[i]==Integer.MAX_VALUE)
+                           newf=Integer.MAX_VALUE;
+                       else
+                           newf=g[i]+h[i];
+                       newf=g[i]+h[i];
 					   if(f[i]>newf){
 						   f[i]=newf;
 					   }
