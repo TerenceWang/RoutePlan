@@ -18,7 +18,7 @@ public class RepeatDijsktra {
         this.distancecount=0;
         this.pathcount=new ArrayList<Integer>();
     }
-    public void doRepeatDijsktra(){
+    public int doRepeatDijsktra(){
         Dijsktra dj=new Dijsktra();
         dj.dodijsktra(timeSeriesMapList.get(0),start);
         int now=dj.getpath(end)[1];
@@ -32,10 +32,13 @@ public class RepeatDijsktra {
             djj.dodijsktra(timeSeriesMapList.get(timecount),now);
             int temp=djj.getpath(end)[1];
             timecount+=timeSeriesMapList.get(timecount)[now][temp];
+            if(timecount<=timeSeriesMapList.size())
+                return 1;
             distancecount+=timeSeriesMapList.get(0)[now][temp];
             pathcount.add(temp);
             now=temp;
         }
+        return 0;
     }
     public int[] getpath(){
         int [] result=new int[pathcount.size()];

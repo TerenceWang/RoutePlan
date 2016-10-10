@@ -92,15 +92,19 @@ public class Map {
             DStarLite dStarLite=new DStarLite(m,floyd,tmp,start,end);
             long time3=System.currentTimeMillis();
             int res=dStarLite.doDStarLite();
+            long time4=System.currentTimeMillis();
             if(res<0)
                 continue;
-            count++;
-            long time4=System.currentTimeMillis();
 
             RepeatDijsktra repeatDijsktra=new RepeatDijsktra(tmp,start,end);
             long time1=System.currentTimeMillis();
-            repeatDijsktra.doRepeatDijsktra();
+            res=repeatDijsktra.doRepeatDijsktra();
             long time2=System.currentTimeMillis();
+
+            if(res<0)
+                continue;
+
+            count++;
 
             dijruntime+=(time2-time1);
             starruntime+=(time4-time3);
