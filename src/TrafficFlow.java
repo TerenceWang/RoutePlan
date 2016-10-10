@@ -73,7 +73,7 @@ public class TrafficFlow {
     {
         ArrayList timeSeriesMapList = new ArrayList<int[][]>();
         int nodecount = m.graph.getNumOfVertex();
-        int[][] mapDefault = new int[nodecount][nodecount];
+        int[][] mapDefault = m.graph.getEdgeMatrix();
         int[][] timeMap = new int[nodecount][nodecount];
         int[][] mapNow = new int[nodecount][nodecount];
         int[][] mapTemp = new int[nodecount][nodecount];
@@ -81,11 +81,12 @@ public class TrafficFlow {
         int probNewFlow = 10; // Probability of setting up a new traffic flow(1/prob)
         int baseNewFlow = 500; // Basic size of new traffic flow
         int addSizeNewFlow = 500; // Random size add to the new traffic flow (1 - addSizeNewFlow)
-        int countInitFlow = 3; // How many flows set up while init
+        int countInitFlow = 5; // How many flows set up while init
         int baseInitFlow = 1600; // Basic size while init traffic flow
         int addSizeInitFlow = 400; // Random size add to the init traffic flows (1 - addSizeInitFlow)
         int timeFunctionConst = 200; // Const in time function
         int countflow = 0;
+        System.out.println(nodecount);
         for(int i = 0; i < nodecount; ++i)
             for(int j = 0; j < nodecount; ++j)
             {
@@ -93,13 +94,12 @@ public class TrafficFlow {
                 mapNow[i][j] = 0;
                 timeStartMap[i][j] = 0;
                 mapTemp[i][j] = 0;
-                mapDefault[i][j] = m.graph.getEdgeMatrix()[i][j];
 //                if (mapDefault[i][j] == Integer.MAX_VALUE)
 //                    mapDefault[i][j] = 0;
             }
         timeSeriesMapList.add(mapDefault);
+        //System.out.println("Init OVER.");
         ArrayList<double[]> probMap = generateegedweigh();
-
         while(countflow < countInitFlow)
         {
             for (int i = 0; i < nodecount; ++i)
@@ -121,6 +121,7 @@ public class TrafficFlow {
                     }
 //                    System.out.println(i);
                 }
+                //System.out.println("INIT "+ countflow);
             }
         }
         {
@@ -150,8 +151,8 @@ public class TrafficFlow {
                     mapTemp[i][j] = 0;
                 mapNow[i][j] = 0;
             }
-
-        for(int timeSeries = 2; timeSeries < 800; ++timeSeries)
+        //System.out.println("1 OVER.");
+        for(int timeSeries = 2; timeSeries < 1000; ++timeSeries)
         {
             for (int i = 0; i < nodecount; ++i)
             {
@@ -216,6 +217,7 @@ public class TrafficFlow {
                         mapTemp[i][j] = 0;
                     mapNow[i][j] = 0;
                 }
+            //System.out.println(timeSeries + " OVER.");
         }
 
 

@@ -10,11 +10,11 @@ public class Main {
 //        fl.dofloyd(s);
         Dijsktra di=new Dijsktra();
         di.dodijsktra(s,start);
-//        int []a=fl.getpath(start,end);
-        int []a2=di.getpath(end);
-//        Astar astar=new Astar(fl,m);
-//        astar.doastar(s,start,end);
-//        int []ss = astar.getpath(start,end);
+        int []a = fl.getpath(start,end);
+        int []a2 = di.getpath(end);
+        Astar astar=new Astar(fl, m);
+        astar.doastar(s,start,end);
+        int []ss = astar.getpath(start,end);
         int result=0;
 //        for (int i = 0; i < ss.length; i++) {
 //            System.out.print(ss[i]+" ");

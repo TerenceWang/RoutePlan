@@ -8,7 +8,9 @@ public class Dijsktra {
 
     }
     public void dodijsktra(int[][] edge, int start){
+
         int vertexnumber=edge.length;
+
         shortestpath=new int[vertexnumber];
         path=new String[vertexnumber];
         for(int i=0;i<vertexnumber;i++)
@@ -19,8 +21,8 @@ public class Dijsktra {
                 edgetmp[i][j]=edge[i][j];
             }
         }
-        int[] visited = new int[vertexnumber];
 
+        int[] visited = new int[vertexnumber];
         shortestpath[start] = 0;
         visited[start] = 1;
 
@@ -37,8 +39,7 @@ public class Dijsktra {
 
             visited[k] = 1;
             for(int i = 0;i < vertexnumber;i++){
-                if(visited[i] == 0 && edgetmp[start][k] + edgetmp[k][i] < edgetmp[start][i]&&edgetmp[k][i]<Integer.MAX_VALUE
-                        ){
+                if(visited[i] == 0 && edgetmp[start][k] + edgetmp[k][i] < edgetmp[start][i] && edgetmp[k][i]<Integer.MAX_VALUE){
                     edgetmp[start][i] = edgetmp[start][k] + edgetmp[k][i];
                     path[i]=path[k]+","+i;
                 }

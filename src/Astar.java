@@ -54,6 +54,8 @@ public class Astar {
 //            closelist.add(currentnode);
 //        }
 //    }
+
+
     private int[] getSucc(int u){
         ArrayList<Integer> t=new ArrayList<Integer>();
         int id=map.graph.getFirstNeighbor(u);
@@ -70,6 +72,7 @@ public class Astar {
         }
         return s;
     }
+
 	public void doastar(int[][] edge, int start, int end){
     	/**********************************************************
     	 *  Definition & Initiation
@@ -109,25 +112,26 @@ public class Astar {
     	/**
     	 *  Definition & Initiation
     	 ***************************************************************************/
-        
-        /***************************************************************************
-         * Main Process  
-         */                   // While open list has some nodes in it 
+
+    	/***************************************************************************
+         * Main Process
+         ***************************************************************************/
+        // While open list has some nodes in it
       
        while(opennum!=0 && visited[end]!=0 ){							    
     	   	int tempmin=0,currentnode=0;
-   //get the node with min-f[i] in the Openlist
+            //get the node with min-f[i] in the Openlist
     	   	for(int i=0;i<opennum;i++){
     	   		if(tempmin>f[i]){
     			   tempmin=f[i];
     			   currentnode=i;
     		   }
     	   	}
-   //remove from open list and add to close list
-		   opennum--;
-		   closenum++;
-		   visited[currentnode] = 0;
-   //for adjacent nodes
+            //remove from open list and add to close list
+		    opennum--;
+		    closenum++;
+		    visited[currentnode] = 0;
+            //for adjacent nodes
 	    	  
 		   for(int i=0;i<vertexnumber;i++){
 

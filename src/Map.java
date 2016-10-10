@@ -49,17 +49,18 @@ public class Map {
 
     public static void main(String[] args) {
         Map m=new Map();
-        m.readmap("data/nodenumber_10_edgenumber_327.map");
+        m.readmap("data/nodenumber_400_edgenumber_1376.map");
         int [][]s=m.graph.getEdgeMatrix();
         int start=5;
-        int end=40;
+        int end=300;
 
 
-        Dijsktra dijsktra=new Dijsktra();
-        dijsktra.dodijsktra(s,start);
+        //Dijsktra dijsktra=new Dijsktra();
+        //dijsktra.dodijsktra(s,start);
 
         Floyd floyd=new Floyd();
         floyd.dofloyd(s);
+        System.out.println("Floyd OVER.");
 
 //
 //
@@ -82,12 +83,14 @@ public class Map {
 
         BufferedWriter out= null;
         try {
-            out = new BufferedWriter(new FileWriter("data/500-result.txt",true));
-        for (int ii= 0; ii < 500; ++ii)
+            out = new BufferedWriter(new FileWriter("data/500-result-2500map.txt",true));
+        for (int ii= 0; ii < 5; ++ii)
         {
+            System.out.println("It " + ii + "Start.");
             TrafficFlow trafficFlow=new TrafficFlow(m);
             ArrayList<int[][]> tmp = new ArrayList<>();
             tmp=trafficFlow.generateTrafficFlow();
+            System.out.println("TrafficFlow " + ii + " OVER.");
 
             DStarLite dStarLite=new DStarLite(m,floyd,tmp,start,end);
             long time3=System.currentTimeMillis();
