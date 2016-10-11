@@ -10,10 +10,35 @@ public class TrafficFlow {
     private int[][] edge;
     TrafficFlow(Map map){
         this.m=map;
-        probMap = generateegedweigh();
         this.edge=map.graph.getEdgeMatrix();
-
+        probMap = generateegedweigh();
     }
+
+    public ArrayList<int[][]> generateCongestion()
+    {
+        int nodecount = m.graph.getNumOfVertex();
+        ArrayList result = new ArrayList<int[][]>();
+        int probNewFlow = 100; // Probability of setting up a new traffic jam(1/prob)
+
+        for(int timeSeries = 0; timeSeries < 1000; ++timeSeries)
+        {
+            int[][] mapDefault = m.graph.getEdgeMatrix();
+            for(int i = 0; i < nodecount;++i)
+            {
+                int[] s = getSucc(i);
+                for(int j = 0; j < s.length; ++j)
+                {
+                    Random rand = new Random();
+                    int temp = rand.nextInt(probNewFlow);
+                    if (temp == 1)
+                        mapDefault[i][s[j]] = Integer.MAX_VALUE;
+                }
+            }
+            result.add(mapDefault);
+        }
+        return result;
+    }
+
     public double[][] generateegedweigh(){
         int nodecount=m.graph.getEdgeMatrix().length;
         int k=5;

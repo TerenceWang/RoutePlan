@@ -293,7 +293,7 @@ public class DStarLite {
             //System.out.println("Pos before " + curposition);
             int temp = -1;
             for (int i = 0; i < s.length; i++) {
-                //System.out.println("1--- " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]+ " " + g[s[i]]);
+                System.out.println("1--- " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]+ " " + g[s[i]]);
                 if (g[s[i]] != Integer.MAX_VALUE &&
                         min > timeSeriesMapList.get(timecount)[curposition][s[i]] + g[s[i]]){
                     min = (timeSeriesMapList.get(timecount)[curposition][s[i]] + g[s[i]]);
@@ -303,7 +303,7 @@ public class DStarLite {
             }
             if (temp == -1)
                 for (int i = 0; i < s.length; i++) {
-                    //System.out.println("2--- " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]);
+                    System.out.println("2--- " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]);
                     if (min>timeSeriesMapList.get(timecount)[curposition][s[i]]){
                         min = (timeSeriesMapList.get(timecount)[curposition][s[i]]);
                         temp=s[i];
@@ -311,7 +311,7 @@ public class DStarLite {
                     }
                 }
             int timeold = timecount;
-            //System.out.println(timecount + " " + curposition + " " + temp);
+            System.out.println(timecount + " " + curposition + " " + temp);
             //System.out.println("cccc " + timeSeriesMapList.get(timecount)[curposition][temp] + " " + temp + " " + min);
             timecount += timeSeriesMapList.get(timecount)[curposition][temp];
             distancecount += timeSeriesMapList.get(0)[curposition][temp];

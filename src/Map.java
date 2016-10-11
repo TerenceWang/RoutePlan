@@ -88,11 +88,12 @@ public class Map {
         BufferedWriter out= null;
         try {
             out = new BufferedWriter(new FileWriter("data/" + "5-result-400map.txt",true));
-        for (int ii= 0; ii < 100; ++ii)
+        for (int ii= 0; ii < 5; ++ii)
         {
             System.out.println("It " + ii + "Start.");
             ArrayList<int[][]> tmp = new ArrayList<>();
-            tmp=trafficFlow.generateTrafficFlow();
+//            tmp=trafficFlow.generateTrafficFlow();
+            tmp=trafficFlow.generateCongestion();
             System.out.println("TrafficFlow " + ii + " OVER.");
 
             DStarLite dStarLite=new DStarLite(m,floyd,tmp,start,end);
@@ -101,6 +102,7 @@ public class Map {
             long time4=System.currentTimeMillis();
             if(res<0)
                 continue;
+            System.out.println("1");
 
             DStarLite dStarLiteLabel=new DStarLite(m,floyd,tmp,start,end);
             long time5=System.currentTimeMillis();
@@ -108,20 +110,21 @@ public class Map {
             long time6=System.currentTimeMillis();
             if(res<0)
                 continue;
+            System.out.println("2");
 
             RepeatDijsktra repeatDijsktra=new RepeatDijsktra(tmp,start,end);
             long time1=System.currentTimeMillis();
             res=repeatDijsktra.doRepeatDijsktra();
             long time2=System.currentTimeMillis();
-
             if(res<0)
                 continue;
+            System.out.println("3");
 
-            count++;
 
             dijruntime+=(time2-time1);
             starruntime+=(time4-time3);
             starlabelruntime += (time6-time5);
+            count++;
 
 
 //            for (int i = 0; i < repeatDijsktra.getpath().length; i++) {
