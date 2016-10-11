@@ -29,8 +29,20 @@ public class RepeatDijsktra {
         pathcount.add(now);
         while(now!=end){
             Dijsktra djj=new Dijsktra();
-            djj.dodijsktra(timeSeriesMapList.get(timecount),now);
-            int temp=djj.getpath(end)[1];
+            int res=djj.dodijsktra(timeSeriesMapList.get(timecount),now);
+            int temp;
+            if(res<0){
+                int []t=getSucc(now);
+                int min=Integer.MAX_VALUE;
+                for (int i = 0; i < t.length; i++) {
+                    if(min<t[i])
+                        min=t[i];
+                }
+                if(min==Integer.MAX_VALUE)
+                    return -1;
+                temp=min;
+            }else
+                temp=djj.getpath(end)[1];
             timecount+=timeSeriesMapList.get(timecount)[now][temp];
             if(timecount>=timeSeriesMapList.size())
                 return -1;
@@ -53,5 +65,32 @@ public class RepeatDijsktra {
     public int getTimecount(){
         return timecount;
     }
-
+    public int[] getSucc(int u){
+        int vertexnumbber=timeSeriesMapList.get(timecount).length;
+        int vertexperline=(int)Math.sqrt(vertexnumbber);
+        int row=u/vertexperline;
+        int col=u%vertexperline;
+        ArrayList<Integer> t = new ArrayList<Integer>();
+        int cola=col-1;
+        int colb=col+1;
+        int rowa=row-1;
+        int rowb=row+1;
+        if(cola>-1&&timeSeriesMapList.get(timecount)[u][cola+row*vertexperline]!=Integer.MAX_VALUE){
+            t.add(cola+row*vertexperline);
+        }
+        if(colb<vertexperline&&timeSeriesMapList.get(timecount)[u][colb+row*vertexperline]!=Integer.MAX_VALUE){
+            t.add(colb+row*vertexperline);
+        }
+        if(rowa>-1&&timeSeriesMapList.get(timecount)[u][rowa*vertexperline+col]!=Integer.MAX_VALUE){
+            t.add(rowa*vertexperline+col);
+        }
+        if(rowb<vertexperline&&timeSeriesMapList.get(timecount)[u][rowb*vertexperline+col]!=Integer.MAX_VALUE){
+            t.add(rowb*vertexperline+col);
+        }
+        int []s=new int[t.size()];
+        for (int i = 0; i < s.length; i++) {
+            s[i]=t.get(i);
+        }
+        return s;
+    }
 }

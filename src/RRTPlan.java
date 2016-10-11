@@ -1,7 +1,9 @@
 import javax.naming.ldap.StartTlsRequest;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Stack;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by terence on 10/11/16.
@@ -183,22 +185,35 @@ public class RRTPlan {
         int colb=col+1;
         int rowa=row-1;
         int rowb=row+1;
-        if(cola>-1&&edge[u][cola+row*vertexperline]!=Integer.MAX_VALUE){
+        if(cola>-1&&timeSeriesMapList.get(timecount)[u][cola+row*vertexperline]!=Integer.MAX_VALUE){
             t.add(cola+row*vertexperline);
         }
-        if(colb<vertexperline&&edge[u][colb+row*vertexperline]!=Integer.MAX_VALUE){
+        if(colb<vertexperline&&timeSeriesMapList.get(timecount)[u][colb+row*vertexperline]!=Integer.MAX_VALUE){
             t.add(colb+row*vertexperline);
         }
-        if(rowa>-1&&edge[u][rowa*vertexperline+col]!=Integer.MAX_VALUE){
+        if(rowa>-1&&timeSeriesMapList.get(timecount)[u][rowa*vertexperline+col]!=Integer.MAX_VALUE){
             t.add(rowa*vertexperline+col);
         }
-        if(rowb<vertexperline&&edge[u][rowb*vertexperline+col]!=Integer.MAX_VALUE){
+        if(rowb<vertexperline&&timeSeriesMapList.get(timecount)[u][rowb*vertexperline+col]!=Integer.MAX_VALUE){
             t.add(rowb*vertexperline+col);
         }
         int []s=new int[t.size()];
         for (int i = 0; i < s.length; i++) {
             s[i]=t.get(i);
         }
+        shuffleArray(s);
         return s;
+    }
+     void shuffleArray(int[] ar)
+    {
+        // If running on Java 6 or older, use `new Random()` on RHS here
+        Random rnd = ThreadLocalRandom.current();
+        for (int i = ar.length - 1; i > 0; i--)
+        {
+            int index = rnd.nextInt(i + 1);
+            int a = ar[index];
+            ar[index] = ar[i];
+            ar[i] = a;
+        }
     }
 }

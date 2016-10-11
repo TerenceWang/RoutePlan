@@ -20,18 +20,24 @@ public class TrafficFlow {
         ArrayList result = new ArrayList<int[][]>();
         int probNewFlow = 100; // Probability of setting up a new traffic jam(1/prob)
 
-        for(int timeSeries = 0; timeSeries < 1000; ++timeSeries)
+        for(int timeSeries = 0; timeSeries < 1500; ++timeSeries)
         {
             int[][] mapDefault = m.graph.getEdgeMatrix();
             for(int i = 0; i < nodecount;++i)
             {
                 int[] s = getSucc(i);
+                int count = 1;
                 for(int j = 0; j < s.length; ++j)
                 {
+                    if (count == s.length)
+                        continue;
                     Random rand = new Random();
                     int temp = rand.nextInt(probNewFlow);
                     if (temp == 1)
+                    {
                         mapDefault[i][s[j]] = Integer.MAX_VALUE;
+                        count++;
+                    }
                 }
             }
             result.add(mapDefault);

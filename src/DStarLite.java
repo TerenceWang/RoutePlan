@@ -126,7 +126,7 @@ public class DStarLite {
     private void update_lower(int u, State sourcev){
         switch (tag[u]){
             case 0:
-                rhs[u] = g[sourcev.vertex]+timeSeriesMapList.get(timecount)[u][sourcev.vertex];
+                rhs[u] = g[sourcev.vertex] + timeSeriesMapList.get(timecount)[u][sourcev.vertex];
                 father[u] = sourcev.vertex;
                 tag[u] = 1;
                 priorityqueue.add(CalculateKey(u));
@@ -189,10 +189,10 @@ public class DStarLite {
                 //System.out.println("ADD " + knew.vertex + " Remain " + priorityqueue.size());
                 priorityqueue.add(knew);
             }
-            else if(getG(u.vertex)>getRHS(u.vertex)){
+            else if(getG(u.vertex) > getRHS(u.vertex)){
 //                if (getG(u.vertex) == Integer.MAX_VALUE)
 //                    System.out.print("K! " + u.vertex + " ");
-                g[u.vertex]=rhs[u.vertex];
+                g[u.vertex] = rhs[u.vertex];
                 //System.out.println(getG(u.vertex));
                 int []s=getPrev(u.vertex);
                 for (int i = 0; i < s.length; i++) {
@@ -233,8 +233,8 @@ public class DStarLite {
             //System.out.println("Pos before " + curposition);
             int temp = -1;
             for (int i = 0; i < s.length; i++) {
-                //System.out.println("1--- " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]+ " " + g[s[i]]);
-                if (g[s[i]] != Integer.MAX_VALUE &&
+//                System.out.println("1+++ " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]+ " " + g[s[i]]);
+                if (g[s[i]] != Integer.MAX_VALUE && timeSeriesMapList.get(timecount)[curposition][s[i]] != Integer.MAX_VALUE &&
                         min > timeSeriesMapList.get(timecount)[curposition][s[i]] + g[s[i]]){
                     min = (timeSeriesMapList.get(timecount)[curposition][s[i]] + g[s[i]]);
                     temp = s[i];
@@ -243,7 +243,7 @@ public class DStarLite {
             }
             if (temp == -1)
                 for (int i = 0; i < s.length; i++) {
-                    //System.out.println("2--- " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]);
+//                    System.out.println("2+++ " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]);
                     if (min>timeSeriesMapList.get(timecount)[curposition][s[i]]){
                         min = (timeSeriesMapList.get(timecount)[curposition][s[i]]);
                         temp=s[i];
@@ -251,9 +251,11 @@ public class DStarLite {
                     }
                 }
             int timeold = timecount;
-            //System.out.println(timecount + " " + curposition + " " + temp);
+//            System.out.println("+++ " + timecount + " " + curposition + " " + temp);
             //System.out.println("cccc " + timeSeriesMapList.get(timecount)[curposition][temp] + " " + temp + " " + min);
             timecount += timeSeriesMapList.get(timecount)[curposition][temp];
+            if(timecount>=timeSeriesMapList.size())
+                return -1;
             distancecount += timeSeriesMapList.get(0)[curposition][temp];
             //System.out.println("ADD " + temp + " Remain " + priorityqueue.size());
             pathcount.add(temp);
@@ -288,13 +290,14 @@ public class DStarLite {
         ComputeShortestPath();
         pathcount.add(start);
         while (curposition != end){
+
             int []s=getSucc(curposition);
             int min=Integer.MAX_VALUE;
             //System.out.println("Pos before " + curposition);
             int temp = -1;
             for (int i = 0; i < s.length; i++) {
-                System.out.println("1--- " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]+ " " + g[s[i]]);
-                if (g[s[i]] != Integer.MAX_VALUE &&
+                //System.out.println("1--- " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]+ " " + g[s[i]]);
+                if (g[s[i]] != Integer.MAX_VALUE && timeSeriesMapList.get(timecount)[curposition][s[i]] != Integer.MAX_VALUE &&
                         min > timeSeriesMapList.get(timecount)[curposition][s[i]] + g[s[i]]){
                     min = (timeSeriesMapList.get(timecount)[curposition][s[i]] + g[s[i]]);
                     temp=s[i];
@@ -303,7 +306,7 @@ public class DStarLite {
             }
             if (temp == -1)
                 for (int i = 0; i < s.length; i++) {
-                    System.out.println("2--- " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]);
+                    //System.out.println("2--- " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]);
                     if (min>timeSeriesMapList.get(timecount)[curposition][s[i]]){
                         min = (timeSeriesMapList.get(timecount)[curposition][s[i]]);
                         temp=s[i];
@@ -311,9 +314,11 @@ public class DStarLite {
                     }
                 }
             int timeold = timecount;
-            System.out.println(timecount + " " + curposition + " " + temp);
+            //System.out.println(timecount + " " + curposition + " " + temp);
             //System.out.println("cccc " + timeSeriesMapList.get(timecount)[curposition][temp] + " " + temp + " " + min);
             timecount += timeSeriesMapList.get(timecount)[curposition][temp];
+            if(timecount>=timeSeriesMapList.size())
+                return -1;
             distancecount += timeSeriesMapList.get(0)[curposition][temp];
             //System.out.println("ADD " + temp + " Remain " + priorityqueue.size());
             pathcount.add(temp);
@@ -379,8 +384,7 @@ public class DStarLite {
     }
 
     private int[] getPrev(int u){
-        int vertexnumbber=map.graph.getEdgeMatrix().length;
-        int[][] edge=map.graph.getEdgeMatrix();
+        int vertexnumbber=timeSeriesMapList.get(0).length;
         int vertexperline=(int)Math.sqrt(vertexnumbber);
         int row=u/vertexperline;
         int col=u%vertexperline;
@@ -389,16 +393,16 @@ public class DStarLite {
         int colb=col+1;
         int rowa=row-1;
         int rowb=row+1;
-        if(cola>-1&&edge[cola+row*vertexperline][u]!=Integer.MAX_VALUE){
+        if(cola>-1&&timeSeriesMapList.get(timecount)[cola+row*vertexperline][u]!=Integer.MAX_VALUE){
             t.add(cola+row*vertexperline);
         }
-        if(colb<vertexperline&&edge[colb+row*vertexperline][u]!=Integer.MAX_VALUE){
+        if(colb<vertexperline&&timeSeriesMapList.get(timecount)[colb+row*vertexperline][u]!=Integer.MAX_VALUE){
             t.add(colb+row*vertexperline);
         }
-        if(rowa>-1&&edge[rowa*vertexperline+col][u]!=Integer.MAX_VALUE){
+        if(rowa>-1&&timeSeriesMapList.get(timecount)[rowa*vertexperline+col][u]!=Integer.MAX_VALUE){
             t.add(rowa*vertexperline+col);
         }
-        if(rowb<vertexperline&&edge[rowb*vertexperline+col][u]!=Integer.MAX_VALUE){
+        if(rowb<vertexperline&&timeSeriesMapList.get(timecount)[rowb*vertexperline+col][u]!=Integer.MAX_VALUE){
             t.add(rowb*vertexperline+col);
         }
         int []s=new int[t.size()];
@@ -417,16 +421,16 @@ public class DStarLite {
         int colb=col+1;
         int rowa=row-1;
         int rowb=row+1;
-        if(cola>-1&&edge[u][cola+row*vertexperline]!=Integer.MAX_VALUE){
+        if(cola>-1&&timeSeriesMapList.get(timecount)[u][cola+row*vertexperline]!=Integer.MAX_VALUE){
             t.add(cola+row*vertexperline);
         }
-        if(colb<vertexperline&&edge[u][colb+row*vertexperline]!=Integer.MAX_VALUE){
+        if(colb<vertexperline && timeSeriesMapList.get(timecount)[u][colb+row*vertexperline]!=Integer.MAX_VALUE){
             t.add(colb+row*vertexperline);
         }
-        if(rowa>-1&&edge[u][rowa*vertexperline+col]!=Integer.MAX_VALUE){
+        if(rowa>-1&&timeSeriesMapList.get(timecount)[u][rowa*vertexperline+col]!=Integer.MAX_VALUE){
             t.add(rowa*vertexperline+col);
         }
-        if(rowb<vertexperline&&edge[u][rowb*vertexperline+col]!=Integer.MAX_VALUE){
+        if(rowb<vertexperline&&timeSeriesMapList.get(timecount)[u][rowb*vertexperline+col]!=Integer.MAX_VALUE){
             t.add(rowb*vertexperline+col);
         }
         int []s=new int[t.size()];
