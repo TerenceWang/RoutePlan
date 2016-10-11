@@ -21,6 +21,7 @@ public class DStarLite {
     private int []father;
     private PriorityQueue<State> priorityqueue;
     private ArrayList<int[][]> timeSeriesMapList;
+    int[][] edge;
     DStarLite(){
 
     }
@@ -39,6 +40,7 @@ public class DStarLite {
         this.timeSeriesMapList=timeSeriesMapList;
         this.tag=new int [m.nodetotal];
         this.father=new int [m.nodetotal];
+        this.edge = m.graph.getEdgeMatrix();
     }
 
     private State CalculateKey(int s){
@@ -102,8 +104,8 @@ public class DStarLite {
         while (!priorityqueue.isEmpty()
                 &&(priorityqueue.peek().compareTo(CalculateKey(curposition))==-1
                 ||getRHS(curposition)!=getG(curposition))){
-            if(g[topv.vertex]>rhs[topv.vertex]){
-                g[topv.vertex]=rhs[topv.vertex];
+            if(g[topv.vertex] > rhs[topv.vertex]){
+                g[topv.vertex] = rhs[topv.vertex];
                 tag[topv.vertex]=2;
                 priorityqueue.remove(topv);
                 int[] k=getPrev(topv.vertex);
@@ -112,25 +114,26 @@ public class DStarLite {
                 }
             }
             else{
-                g[topv.vertex]=Integer.MAX_VALUE;
+                g[topv.vertex] = Integer.MAX_VALUE;
                 int[] k=getPrev(topv.vertex);
                 for (int i = 0; i < k.length; i++) {
                     update_raise(k[i]);
                 }
             }
-            topv=priorityqueue.peek();
+            topv = priorityqueue.peek();
         }
     }
     private void update_lower(int u, State sourcev){
         switch (tag[u]){
             case 0:
-                rhs[u]=g[sourcev.vertex]+timeSeriesMapList.get(timecount)[u][sourcev.vertex];
-                father[u]=sourcev.vertex;
-                tag[u]=1;
+                rhs[u] = g[sourcev.vertex]+timeSeriesMapList.get(timecount)[u][sourcev.vertex];
+                father[u] = sourcev.vertex;
+                tag[u] = 1;
                 priorityqueue.add(CalculateKey(u));
                 break;
             case 1:
-                if(rhs[u]>g[sourcev.vertex]+timeSeriesMapList.get(timecount)[u][sourcev.vertex]) {
+                if(g[sourcev.vertex] != Integer.MAX_VALUE
+                        && rhs[u] > g[sourcev.vertex] + timeSeriesMapList.get(timecount)[u][sourcev.vertex]) {
                     rhs[u] = g[sourcev.vertex] + timeSeriesMapList.get(timecount)[u][sourcev.vertex];
                     father[u] = sourcev.vertex;
                     priorityqueue.remove(new State(u, 0, 0));
@@ -138,11 +141,12 @@ public class DStarLite {
                 }
                 break;
             case 2:
-                if(rhs[u]>g[sourcev.vertex]+timeSeriesMapList.get(timecount)[u][sourcev.vertex]
+                if(g[sourcev.vertex] != Integer.MAX_VALUE
+                        && rhs[u] > g[sourcev.vertex]+timeSeriesMapList.get(timecount)[u][sourcev.vertex]
                         || father[u]==sourcev.vertex){
-                    rhs[u]=g[sourcev.vertex]+timeSeriesMapList.get(timecount)[u][sourcev.vertex];
-                    father[u]=sourcev.vertex;
-                    tag[u]=1;
+                    rhs[u] = g[sourcev.vertex] + timeSeriesMapList.get(timecount)[u][sourcev.vertex];
+                    father[u] = sourcev.vertex;
+                    tag[u] = 1;
                     priorityqueue.add(CalculateKey(u));
                 }
                 break;
@@ -152,17 +156,17 @@ public class DStarLite {
         if(u!=end){
             int []k=getSucc(u);
             for (int i = 0; i < k.length; i++) {
-                if(tag[k[i]]==2&&rhs[u]>g[k[i]]+timeSeriesMapList.get(timecount)[u][k[i]]){
-                    rhs[u]=g[k[i]]+timeSeriesMapList.get(timecount)[u][k[i]];
-                    father[u]=k[i];
+                if(g[k[i]] != Integer.MAX_VALUE && tag[k[i]]==2 && rhs[u]>g[k[i]]+timeSeriesMapList.get(timecount)[u][k[i]]){
+                    rhs[u] = g[k[i]] + timeSeriesMapList.get(timecount)[u][k[i]];
+                    father[u] = k[i];
                 }
             }
             if(rhs[u]!=g[u]&&tag[u]!=1){
-                tag[u]=1;
+                tag[u] = 1;
                 priorityqueue.add(CalculateKey(u));
             }
             if(rhs[u]==g[u]&&tag[u]==1){
-                tag[u]=2;
+                tag[u] = 2;
                 priorityqueue.remove(new State(u,0,0));
             }
 
@@ -265,22 +269,9 @@ public class DStarLite {
                         UpdateVertex(i);
                     }
                 }
-//                for (int j = 0; j < map.nodetotal; j++) {
-//
-//                    if(timeSeriesMapList.get(timecount)[i][j]==Integer.MAX_VALUE)
-//                        continue;
-//                    //System.out.println(i+" " + j + " "+timecount+" "+timeSeriesMapList.get(timecount)[i][j]);
-//                    if(timeSeriesMapList.get(timecount)[i][j]!=timeSeriesMapList.get(timeold)[i][j]){
-//                        flag=true;
-//                        //System.out.println("2!222");
-//                        UpdateVertex(i);
-//                    }
-//                }
             }
             if(priorityqueue.isEmpty())
             {
-                //System.out.println("!REPORT!");
-                //System.out.println("ADD " + curposition + " Remain " + priorityqueue.size());
                 priorityqueue.add(CalculateKey(curposition));
             }
             if (flag){
@@ -417,7 +408,6 @@ public class DStarLite {
         return s;
     }
     public int[] getSucc(int u){
-        int[][] edge=map.graph.getEdgeMatrix();
         int vertexnumbber=edge.length;
         int vertexperline=(int)Math.sqrt(vertexnumbber);
         int row=u/vertexperline;
