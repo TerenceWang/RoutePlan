@@ -19,43 +19,67 @@ public class Main {
         int pathcount1=0;
         int pathcount2=0;
         int pathcount3=0;
-        for (int i = 0; i < 30; i++) {
+        int timecount1=0;
+        int timecount2=0;
+        for (int i = 0; i < 1; i++) {
 
             tmp = trafficFlow.generateTrafficFlow();
 
-            RepeatAStar repeatAStar = new RepeatAStar(tmp, fl, start, end);
-            RepeatDijsktra repeatDijsktra = new RepeatDijsktra(tmp, start, end);
-            DStarLite dStarLite=new DStarLite(m,fl,tmp,start,end);
+//            RepeatAStar repeatAStar = new RepeatAStar(tmp, fl, start, end);
+//            DStarLite dStarLite=new DStarLite(m,fl,tmp,start,end);
+//
+//
+//            long time1=System.currentTimeMillis();
+//            repeatAStar.dorepeatastar();
+//            long time2=System.currentTimeMillis();
+//
+//            pathcount1+=repeatAStar.getpathlength();
+//            a+=time2-time1;
+//
 
+//
+//
+//            pathcount2+=repeatDijsktra.getpathlength();
+//
+//            b+=time2-time1;
+//
+//            time1=System.currentTimeMillis();
+//            dStarLite.doDStarLite();
+//            time2=System.currentTimeMillis();
+//
+//            pathcount3+=dStarLite.getpathlength();
+//
+//            c+=time2-time1;
+            RRTPlan rrtPlan=new RRTPlan(m,fl,tmp,start,end);
+            RepeatDijsktra repeatDijsktra = new RepeatDijsktra(tmp, start, end);
 
             long time1=System.currentTimeMillis();
-            repeatAStar.dorepeatastar();
-            long time2=System.currentTimeMillis();
-
-            pathcount1+=repeatAStar.getpathlength();
+            rrtPlan.repeatdorrtplan();
+            long time2 = System.currentTimeMillis();
             a+=time2-time1;
+
 
             time1=System.currentTimeMillis();
             repeatDijsktra.doRepeatDijsktra();
             time2=System.currentTimeMillis();
-
-
-            pathcount2+=repeatDijsktra.getpathlength();
-
             b+=time2-time1;
-
-            time1=System.currentTimeMillis();
-            dStarLite.doDStarLite();
-            time2=System.currentTimeMillis();
-
-            pathcount3+=dStarLite.getpathlength();
-
-            c+=time2-time1;
+            int[] st=rrtPlan.getpath();
+            for (int j = 0; j < st.length; j++) {
+                System.out.print(st[j]+" ");
+            }
+            System.out.println();
+            pathcount1+=rrtPlan.getpathlength();
+            pathcount2+=repeatDijsktra.getpathlength();
+            timecount1+=rrtPlan.getTimecount();
+            timecount2+=repeatDijsktra.getTimecount();
+            System.out.println("=======================");
 
         }
-        System.out.println("astar: "+a+" "+pathcount1);
-        System.out.println("dij: "+b+" "+pathcount2);
-        System.out.println("dstar: "+c+" "+pathcount3);
+//        System.out.println("astar: "+a+" "+pathcount1);
+        System.out.println("dij rumtime: "+b+" pathcount: "+pathcount2+" timecount: "+timecount2);
+        System.out.println("rrt rumtime: "+a+" pathcount: "+pathcount1+" timecount: "+timecount1);
+
+//        System.out.println("dstar: "+c+" "+pathcount3);
 //        Dijsktra di=new Dijsktra();
 //        di.dodijsktra(s,start);
 //        int []a = fl.getpath(start,end);

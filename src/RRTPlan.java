@@ -1,0 +1,165 @@
+import javax.naming.ldap.StartTlsRequest;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Stack;
+
+/**
+ * Created by terence on 10/11/16.
+ */
+public class RRTPlan {
+    RRTPlan(){
+
+    }
+    private int timecount;
+    private int pathcount;
+    private Floyd floyd;
+    private int start;
+    private int end;
+    private int now;
+    private Map map;
+    private int length;
+    private ArrayList<int[][]> timeSeriesMapList;
+    Stack<Integer> stack= new Stack<Integer>();
+    ArrayList<Integer> path;
+    RRTPlan(Map map,Floyd floyd, ArrayList<int[][]>timeSeriesMapList,int start, int end){
+        this.timecount=0;
+        this.pathcount=0;
+        this.map=map;
+        this.floyd=floyd;
+        this.start= start;
+        this.end=end;
+        this.length = 0;
+        this.timeSeriesMapList=timeSeriesMapList;
+        this.now=start;
+        this.path=new ArrayList<Integer>();
+    }
+
+    private int therhold_target_goal(int a,int b){
+        return (int)(0.5 * floyd.getpathlength(now, end));
+    }
+    private int therhold_now_target(int a,int b){
+//        return ((int)Math.max(timecount / (double)pathcount, 1.4) * floyd.getpathlength(a, b));
+        return (int)(3 * floyd.getpathlength(a, b));
+    }
+
+    public int[] getpath(){
+        int [] result=new int[path.size()];
+        for (int i = 0; i < result.length; i++) {
+            result[i]=path.get(i);
+        }
+        return result;
+    }
+    public int getpathlength(){
+        return pathcount;
+    }
+    public int getTimecount(){
+        return timecount;
+    }
+    public int repeatdorrtplan(){
+        now=start;
+        stack.push(now);
+        path.add(start);
+        while(now!=end){
+            int next=dorrtplan();
+            if(next<0)
+                return -1;
+            timecount+=timeSeriesMapList.get(timecount)[now][next];
+            pathcount+=timeSeriesMapList.get(0)[now][next];
+            int temp=next;
+            path.add(temp);
+
+            System.out.println("ADD!!!!!" + next);
+            now=next;
+            while(!stack.isEmpty())
+                stack.pop();
+            length = 0;
+            stack.push(now);
+        }
+        return 0;
+    }
+    private int heuristic(int start,int end){
+        int result=0;
+        int []s=floyd.getpath(start,end);
+        for (int i = 0; i < s.length-1; i++) {
+            result+=timeSeriesMapList.get(timecount)[s[i]][s[i+1]];
+        }
+
+//        return floyd.getpathlength(start,end);
+        return result;
+    }
+    public int dorrtplan(){
+
+//        if (stack.size() > 10)
+//        {
+//            System.out.println("2Deep 2Reach.");
+//            return -1;
+//        }
+        int target = stack.peek();
+//        System.out.println(target + " " + stack.size());
+        int result = target;
+        if (floyd.getpathlength(target, end) < therhold_target_goal(target, end)) {
+            if (length < therhold_now_target(now, target) || target == end) {
+                if (stack.size() < 2)
+                    result = target;
+                while(stack.size() >= 2)
+                {
+                    result = stack.pop();
+                }
+//                System.out.println("Ans " + result + " " + stack.size());
+                return result;
+            } else {
+//                System.out.println("2long 2reach");
+                return -1;
+            }
+        }
+        else {
+            int[] s = getSucc(target);
+//            System.out.println(target + " NumSucc " + s.length);
+            for (int i = 0; i < s.length; i++) {
+//                System.out.println("Try " + target + " " + s[i]);
+                if (floyd.getpathlength(target, end) <= floyd.getpathlength(s[i], end))
+                {
+//                    System.out.println("cut");
+                    continue;
+                }
+                stack.push(s[i]);
+                length += timeSeriesMapList.get(timecount)[target][s[i]];
+                int resultGet = dorrtplan();
+                if (resultGet > -1)
+                    return resultGet;
+                length -= timeSeriesMapList.get(timecount)[target][s[i]];
+            }
+        }
+//        System.out.println("Finish trying " + target);
+        return -1;
+    }
+    private int[] getSucc(int u){
+        int[][] edge=map.graph.getEdgeMatrix();
+        int vertexnumbber=edge.length;
+        int vertexperline=(int)Math.sqrt(vertexnumbber);
+        int row=u/vertexperline;
+        int col=u%vertexperline;
+        ArrayList<Integer> t = new ArrayList<Integer>();
+        int cola=col-1;
+        int colb=col+1;
+        int rowa=row-1;
+        int rowb=row+1;
+        if(cola>-1&&edge[u][cola+row*vertexperline]!=Integer.MAX_VALUE){
+            t.add(cola+row*vertexperline);
+        }
+        if(colb<vertexperline&&edge[u][colb+row*vertexperline]!=Integer.MAX_VALUE){
+            t.add(colb+row*vertexperline);
+        }
+        if(rowa>-1&&edge[u][rowa*vertexperline+col]!=Integer.MAX_VALUE){
+            t.add(rowa*vertexperline+col);
+        }
+        if(rowb<vertexperline&&edge[u][rowb*vertexperline+col]!=Integer.MAX_VALUE){
+            t.add(rowb*vertexperline+col);
+        }
+        int []s=new int[t.size()];
+        for (int i = 0; i < s.length; i++) {
+            s[i]=t.get(i);
+        }
+        return s;
+    }
+}

@@ -86,7 +86,7 @@ public class TrafficFlow {
         int addSizeInitFlow = 400; // Random size add to the init traffic flows (1 - addSizeInitFlow)
         int timeFunctionConst = 200; // Const in time function
         int countflow = 0;
-        System.out.println(nodecount);
+//        System.out.println(nodecount);
         for(int i = 0; i < nodecount; ++i)
             for(int j = 0; j < nodecount; ++j)
             {
