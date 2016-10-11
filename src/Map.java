@@ -84,7 +84,7 @@ public class Map {
         BufferedWriter out= null;
         try {
             out = new BufferedWriter(new FileWriter("data/500-result-2500map.txt",true));
-        for (int ii= 0; ii < 5; ++ii)
+        for (int ii= 0; ii < 50; ++ii)
         {
             System.out.println("It " + ii + "Start.");
             TrafficFlow trafficFlow=new TrafficFlow(m);

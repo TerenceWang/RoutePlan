@@ -79,12 +79,13 @@ public class TrafficFlow {
         int[][] mapTemp = new int[nodecount][nodecount];
         int[][] timeStartMap = new int[nodecount][nodecount];
         int probNewFlow = 10; // Probability of setting up a new traffic flow(1/prob)
-        int baseNewFlow = 500; // Basic size of new traffic flow
-        int addSizeNewFlow = 500; // Random size add to the new traffic flow (1 - addSizeNewFlow)
+        int baseNewFlow = 300; // Basic size of new traffic flow
+        int addSizeNewFlow = 300; // Random size add to the new traffic flow (1 - addSizeNewFlow)
         int countInitFlow = 5; // How many flows set up while init
         int baseInitFlow = 1600; // Basic size while init traffic flow
         int addSizeInitFlow = 400; // Random size add to the init traffic flows (1 - addSizeInitFlow)
         int timeFunctionConst = 200; // Const in time function
+        int leastFlow = 50; // Ignore the flow under leastFlow.
         int countflow = 0;
         System.out.println(nodecount);
         for(int i = 0; i < nodecount; ++i)
@@ -147,12 +148,12 @@ public class TrafficFlow {
             for(int j = 0; j < nodecount; ++j)
             {
                 mapTemp[i][j] = mapNow[i][j];
-                if (mapTemp[i][j] < 100)
+                if (mapTemp[i][j] < leastFlow)
                     mapTemp[i][j] = 0;
                 mapNow[i][j] = 0;
             }
         //System.out.println("1 OVER.");
-        for(int timeSeries = 2; timeSeries < 1000; ++timeSeries)
+        for(int timeSeries = 2; timeSeries < 600; ++timeSeries)
         {
             for (int i = 0; i < nodecount; ++i)
             {
@@ -213,7 +214,7 @@ public class TrafficFlow {
                 for(int j = 0; j < nodecount; ++j)
                 {
                     mapTemp[i][j] = mapNow[i][j];
-                    if (mapTemp[i][j] < 100 )
+                    if (mapTemp[i][j] < leastFlow )
                         mapTemp[i][j] = 0;
                     mapNow[i][j] = 0;
                 }
