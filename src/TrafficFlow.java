@@ -87,7 +87,7 @@ public class TrafficFlow {
         int timeFunctionConst = 200; // Const in time function
         int leastFlow = 50; // Ignore the flow under leastFlow.
         int countflow = 0;
-        System.out.println(nodecount);
+//        System.out.println(nodecount);
         for(int i = 0; i < nodecount; ++i)
             for(int j = 0; j < nodecount; ++j)
             {
