@@ -19,6 +19,7 @@ public class RRTPlan {
     private int time;
     private Map map;
     private int length;
+    private int[][] edge;
     private ArrayList<int[][]> timeSeriesMapList;
     Stack<Integer> stack= new Stack<Integer>();
     ArrayList<Integer> path;
@@ -36,6 +37,7 @@ public class RRTPlan {
         this.now=start;
         this.path=new ArrayList<Integer>();
         this.visited = new boolean[map.nodetotal];
+        this.edge=map.graph.getEdgeMatrix();
         for(int i = 0; i < map.nodetotal; ++i)
             visited[i] = false;
     }
@@ -172,7 +174,6 @@ public class RRTPlan {
         return -1;
     }
     private int[] getSucc(int u){
-        int[][] edge=map.graph.getEdgeMatrix();
         int vertexnumbber=edge.length;
         int vertexperline=(int)Math.sqrt(vertexnumbber);
         int row=u/vertexperline;

@@ -7,9 +7,12 @@ import java.util.Random;
 public class TrafficFlow {
     private Map m;
     private double[][] probMap;
+    private int[][] edge;
     TrafficFlow(Map map){
         this.m=map;
         probMap = generateegedweigh();
+        this.edge=map.graph.getEdgeMatrix();
+
     }
     public double[][] generateegedweigh(){
         int nodecount=m.graph.getEdgeMatrix().length;
@@ -264,7 +267,6 @@ public class TrafficFlow {
         return -1;
     }
     public int[] getSucc(int u){
-        int[][] edge=m.graph.getEdgeMatrix();
         int vertexnumbber=edge.length;
         int vertexperline=(int)Math.sqrt(vertexnumbber);
         int row=u/vertexperline;
