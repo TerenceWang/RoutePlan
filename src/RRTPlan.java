@@ -16,11 +16,13 @@ public class RRTPlan {
     private int start;
     private int end;
     private int now;
+    private int time;
     private Map map;
     private int length;
     private ArrayList<int[][]> timeSeriesMapList;
     Stack<Integer> stack= new Stack<Integer>();
     ArrayList<Integer> path;
+    boolean[] visited;
     RRTPlan(Map map,Floyd floyd, ArrayList<int[][]>timeSeriesMapList,int start, int end){
         this.timecount=0;
         this.pathcount=0;
@@ -28,19 +30,24 @@ public class RRTPlan {
         this.floyd=floyd;
         this.start= start;
         this.end=end;
+        this.time = 0;
         this.length = 0;
         this.timeSeriesMapList=timeSeriesMapList;
         this.now=start;
         this.path=new ArrayList<Integer>();
+        this.visited = new boolean[map.nodetotal];
+        for(int i = 0; i < map.nodetotal; ++i)
+            visited[i] = false;
     }
 
-    private int therhold_target_goal(int a,int b){
-        return (int)(0.5 * floyd.getpathlength(now, end));
+    private int therhold_target_goal(){
+//        return (int)(0.3 * floyd.getpathlength(now, end));
+        return (int) (0.9*heuristic(now,end));
     }
-    private int therhold_now_target(int a,int b){
-//        return ((int)Math.max(timecount / (double)pathcount, 1.4) * floyd.getpathlength(a, b));
-        return (int)(3 * floyd.getpathlength(a, b));
-    }
+//    private int therhold_now_target(int a,int b){
+////        return ((int)Math.max(timecount / (double)pathcount, 1.4) * floyd.getpathlength(a, b));
+//        return (int)(1.5 * floyd.getpathlength(a, b));
+//    }
 
     public int[] getpath(){
         int [] result=new int[path.size()];
@@ -59,10 +66,16 @@ public class RRTPlan {
         now=start;
         stack.push(now);
         path.add(start);
+        visited[start] = true;
         while(now!=end){
             int next=dorrtplan();
+            length = 0;
+            time = 0;
             if(next<0)
+            {
+                System.out.println("WTF!");
                 return -1;
+            }
             timecount+=timeSeriesMapList.get(timecount)[now][next];
             pathcount+=timeSeriesMapList.get(0)[now][next];
             int temp=next;
@@ -70,9 +83,19 @@ public class RRTPlan {
 
             System.out.println("ADD!!!!!" + next);
             now=next;
+            System.out.println("Time " + timecount + " Length " + pathcount);
+            if (timecount > 1000)
+            {
+                int[] st=getpath();
+                for (int j = 0; j < st.length; j++) {
+                    System.out.print(st[j]+" ");
+                }
+                System.out.println();
+                return -1;
+            }
+            visited[now] = true;
             while(!stack.isEmpty())
                 stack.pop();
-            length = 0;
             stack.push(now);
         }
         return 0;
@@ -97,8 +120,9 @@ public class RRTPlan {
         int target = stack.peek();
 //        System.out.println(target + " " + stack.size());
         int result = target;
-        if (floyd.getpathlength(target, end) < therhold_target_goal(target, end)) {
-            if (length < therhold_now_target(now, target) || target == end) {
+//        if (floyd.getpathlength(target, end) < therhold_target_goal()) {
+        if(heuristic(target,end) < therhold_target_goal()){
+            if (time < (int)(2.5 * heuristic(now, target)) || target == end) {
                 if (stack.size() < 2)
                     result = target;
                 while(stack.size() >= 2)
@@ -108,7 +132,7 @@ public class RRTPlan {
 //                System.out.println("Ans " + result + " " + stack.size());
                 return result;
             } else {
-//                System.out.println("2long 2reach");
+                System.out.println(target + " 2long 2reach " + time + " " + (2 * length));
                 return -1;
             }
         }
@@ -116,21 +140,35 @@ public class RRTPlan {
             int[] s = getSucc(target);
 //            System.out.println(target + " NumSucc " + s.length);
             for (int i = 0; i < s.length; i++) {
-//                System.out.println("Try " + target + " " + s[i]);
-                if (floyd.getpathlength(target, end) <= floyd.getpathlength(s[i], end))
+                System.out.println("Try " + target + " " + s[i]);
+//                if (1.2 * floyd.getpathlength(target, end) <= floyd.getpathlength(s[i], end))
+                if(1.3 * heuristic(target,end) < heuristic(s[i],end))
                 {
-//                    System.out.println("cut");
+                    System.out.println("cut");
+                    continue;
+                }
+                if (visited[s[i]])
+                {
+                    System.out.println("Circle.");
                     continue;
                 }
                 stack.push(s[i]);
-                length += timeSeriesMapList.get(timecount)[target][s[i]];
+                time += timeSeriesMapList.get(timecount)[target][s[i]];
+                length += timeSeriesMapList.get(0)[target][s[i]];
+                visited[s[i]] = true;
                 int resultGet = dorrtplan();
                 if (resultGet > -1)
+                {
+                    visited[s[i]] = false;
                     return resultGet;
-                length -= timeSeriesMapList.get(timecount)[target][s[i]];
+                }
+                visited[s[i]] = false;
+                time -= timeSeriesMapList.get(timecount)[target][s[i]];
+                length -= timeSeriesMapList.get(0)[target][s[i]];
+                System.out.println(time + " x " + length);
             }
         }
-//        System.out.println("Finish trying " + target);
+        System.out.println("Finish trying " + target);
         return -1;
     }
     private int[] getSucc(int u){

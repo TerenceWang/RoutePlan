@@ -78,7 +78,7 @@ public class TrafficFlow {
         int[][] mapNow = new int[nodecount][nodecount];
         int[][] mapTemp = new int[nodecount][nodecount];
         int[][] timeStartMap = new int[nodecount][nodecount];
-        int probNewFlow = 10; // Probability of setting up a new traffic flow(1/prob)
+        int probNewFlow = 50; // Probability of setting up a new traffic flow(1/prob)
         int baseNewFlow = 300; // Basic size of new traffic flow
         int addSizeNewFlow = 300; // Random size add to the new traffic flow (1 - addSizeNewFlow)
         int countInitFlow = 5; // How many flows set up while init

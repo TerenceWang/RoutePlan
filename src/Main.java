@@ -3,8 +3,8 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
-        int start=9;
-        int end=40;
+        int start=5;
+        int end=99;
         Map m=new Map();
         m.readmap("data/nodenumber_10_edgenumber_327.map");
         int [][]s=m.graph.getEdgeMatrix();
