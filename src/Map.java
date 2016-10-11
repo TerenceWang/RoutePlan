@@ -79,13 +79,16 @@ public class Map {
         int dijdistance=0;
         long dijruntime=0;
         long starruntime=0;
+        long starlabelruntime=0;
+        long starlabeldistance = 0;
+        long starlabeltime = 0;
         int count=0;
         TrafficFlow trafficFlow=new TrafficFlow(m);
 
         BufferedWriter out= null;
         try {
             out = new BufferedWriter(new FileWriter("data/" + "5-result-400map.txt",true));
-        for (int ii= 0; ii < 1; ++ii)
+        for (int ii= 0; ii < 100; ++ii)
         {
             System.out.println("It " + ii + "Start.");
             ArrayList<int[][]> tmp = new ArrayList<>();
@@ -94,8 +97,15 @@ public class Map {
 
             DStarLite dStarLite=new DStarLite(m,floyd,tmp,start,end);
             long time3=System.currentTimeMillis();
-            int res=dStarLite.doDStarLiteLabel();
+            int res=dStarLite.doDStarLite();
             long time4=System.currentTimeMillis();
+            if(res<0)
+                continue;
+
+            DStarLite dStarLiteLabel=new DStarLite(m,floyd,tmp,start,end);
+            long time5=System.currentTimeMillis();
+            res=dStarLiteLabel.doDStarLiteLabel();
+            long time6=System.currentTimeMillis();
             if(res<0)
                 continue;
 
@@ -111,6 +121,8 @@ public class Map {
 
             dijruntime+=(time2-time1);
             starruntime+=(time4-time3);
+            starlabelruntime += (time6-time5);
+
 
 //            for (int i = 0; i < repeatDijsktra.getpath().length; i++) {
 //                System.out.println(repeatDijsktra.getpath()[i]);
@@ -124,16 +136,19 @@ public class Map {
 //                System.out.println(dStarLite.getpath()[i]);
 //            }
             System.out.println("===============");
-            System.out.println(dStarLite.getTimecount() + " " + repeatDijsktra.getTimecount());
-            System.out.println(dStarLite.getpathlength() + " " + repeatDijsktra.getpathlength());
+            System.out.println(dStarLite.getTimecount() + " " + dStarLite.getpathlength() );
+            System.out.println(repeatDijsktra.getTimecount() + " " + repeatDijsktra.getpathlength());
+            System.out.println(dStarLiteLabel.getTimecount() + " " + dStarLiteLabel.getpathlength());
             System.out.println("===============");
 
             startimecount+=dStarLite.getTimecount();
             stardistance+=dStarLite.getpathlength();
+            starlabeltime+=dStarLiteLabel.getTimecount();
+            starlabeldistance+=dStarLiteLabel.getpathlength();
             dijdistance+=repeatDijsktra.getpathlength();
             dijtime+=repeatDijsktra.getTimecount();
-            out.write(dStarLite.getTimecount()+" "+dStarLite.getpathlength()+" "+repeatDijsktra.getTimecount()+" "+repeatDijsktra.getpathlength());
-            out.newLine();
+//            out.write(dStarLite.getTimecount()+" "+dStarLite.getpathlength()+" "+repeatDijsktra.getTimecount()+" "+repeatDijsktra.getpathlength());
+//            out.newLine();
 //            System.out.println(dStarLite.getTimecount());
 //            System.out.println(dStarLite.getpathlength());
 //            System.out.println(repeatDijsktra.getTimecount());
@@ -148,7 +163,8 @@ public class Map {
         System.out.println("count: "+count);
         System.out.println(dijdistance+" "+dijtime);
         System.out.println(stardistance+" "+startimecount);
-        System.out.println(dijruntime+" "+starruntime);
+        System.out.println(starlabeldistance + " " + starlabeltime);
+        System.out.println(dijruntime+" "+starruntime + " " + starlabelruntime);
 //        for (int i = 0; i < 2; i++) {
 //            for(int j = 0; j < tmp.get(i).length; ++j) {
 //                for(int k = 0; k < tmp.get(i).length; ++k)
