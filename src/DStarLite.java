@@ -256,14 +256,27 @@ public class DStarLite {
         return s;
     }
     private int[] getSucc(int u){
-        ArrayList<Integer> t=new ArrayList<Integer>();
-        int id=map.graph.getFirstNeighbor(u);
-        t.add(id);
-        while (id!=-1){
-            id=map.graph.getNextNeighbor(u,id);
-            if(id!=-1){
-                t.add(id);
-            }
+        int[][] edge=map.graph.getEdgeMatrix();
+        int vertexnumbber=edge.length;
+        int vertexperline=(int)Math.sqrt(vertexnumbber);
+        int row=u/vertexperline;
+        int col=u%vertexperline;
+        ArrayList<Integer> t = new ArrayList<Integer>();
+        int cola=col-1;
+        int colb=col+1;
+        int rowa=row-1;
+        int rowb=row+1;
+        if(cola>-1&&edge[u][cola+row*vertexperline]!=Integer.MAX_VALUE){
+            t.add(cola+row*vertexperline);
+        }
+        if(colb<vertexperline&&edge[u][colb+row*vertexperline]!=Integer.MAX_VALUE){
+            t.add(colb+row*vertexperline);
+        }
+        if(rowa>-1&&edge[u][rowa*vertexperline+col]!=Integer.MAX_VALUE){
+            t.add(rowa*vertexperline+col);
+        }
+        if(rowb<vertexperline&&edge[u][rowb*vertexperline+col]!=Integer.MAX_VALUE){
+            t.add(rowb*vertexperline+col);
         }
         int []s=new int[t.size()];
         for (int i = 0; i < s.length; i++) {
