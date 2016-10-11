@@ -138,19 +138,21 @@ public class DStarLite {
 //            }
         }
     }
+
     public int doDStarLite(){
         int last=curposition;
         init();
         ComputeShortestPath();
         pathcount.add(start);
-        while (curposition!=end){
+        while (curposition != end){
             int []s=getSucc(curposition);
             int min=Integer.MAX_VALUE;
             //System.out.println("Pos before " + curposition);
-            int temp=-1;
+            int temp = -1;
             for (int i = 0; i < s.length; i++) {
                 //System.out.println("1--- " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]+ " " + g[s[i]]);
-                if (g[s[i]] != Integer.MAX_VALUE && min>timeSeriesMapList.get(timecount)[curposition][s[i]]+g[s[i]]){
+                if (g[s[i]] != Integer.MAX_VALUE &&
+                        min > timeSeriesMapList.get(timecount)[curposition][s[i]] + g[s[i]]){
                     min = (timeSeriesMapList.get(timecount)[curposition][s[i]] + g[s[i]]);
                     temp=s[i];
                     //System.out.println("1!! "+ temp + " " + min + " " + (timeSeriesMapList.get(timecount)[curposition][s[i]]+g[s[i]]));
@@ -165,29 +167,36 @@ public class DStarLite {
                         //System.out.println("1!! "+ temp + " " + min + " " + (timeSeriesMapList.get(timecount)[curposition][s[i]]));
                     }
                 }
-            int timeold=timecount;
+            int timeold = timecount;
             //System.out.println(timecount + " " + curposition + " " + temp);
             //System.out.println("cccc " + timeSeriesMapList.get(timecount)[curposition][temp] + " " + temp + " " + min);
-            timecount+=timeSeriesMapList.get(timecount)[curposition][temp];
-            distancecount+=timeSeriesMapList.get(0)[curposition][temp];
+            timecount += timeSeriesMapList.get(timecount)[curposition][temp];
+            distancecount += timeSeriesMapList.get(0)[curposition][temp];
             //System.out.println("ADD " + temp + " Remain " + priorityqueue.size());
             pathcount.add(temp);
-            curposition=temp;
+            curposition = temp;
             //System.out.println("Pos " + curposition);
             boolean flag=false;
             for (int i = 0; i < map.nodetotal; i++) {
-                for (int j = 0; j < map.nodetotal; j++) {
-                    if(timecount>=timeSeriesMapList.size())
-                        return -1;
-                    if(timeSeriesMapList.get(timecount)[i][j]==Integer.MAX_VALUE)
-                        continue;
-                    //System.out.println(i+" " + j + " "+timecount+" "+timeSeriesMapList.get(timecount)[i][j]);
-                    if(timeSeriesMapList.get(timecount)[i][j]!=timeSeriesMapList.get(timeold)[i][j]){
+                int []k=getSucc(i);
+                for (int j = 0; j < k.length; j++) {
+                    if(timeSeriesMapList.get(timecount)[i][k[j]]!=timeSeriesMapList.get(timeold)[i][k[j]]){
                         flag=true;
                         //System.out.println("2!222");
                         UpdateVertex(i);
                     }
                 }
+//                for (int j = 0; j < map.nodetotal; j++) {
+//
+//                    if(timeSeriesMapList.get(timecount)[i][j]==Integer.MAX_VALUE)
+//                        continue;
+//                    //System.out.println(i+" " + j + " "+timecount+" "+timeSeriesMapList.get(timecount)[i][j]);
+//                    if(timeSeriesMapList.get(timecount)[i][j]!=timeSeriesMapList.get(timeold)[i][j]){
+//                        flag=true;
+//                        //System.out.println("2!222");
+//                        UpdateVertex(i);
+//                    }
+//                }
             }
             if(priorityqueue.isEmpty())
             {
@@ -255,7 +264,7 @@ public class DStarLite {
         }
         return s;
     }
-    private int[] getSucc(int u){
+    public int[] getSucc(int u){
         int[][] edge=map.graph.getEdgeMatrix();
         int vertexnumbber=edge.length;
         int vertexperline=(int)Math.sqrt(vertexnumbber);
@@ -285,14 +294,14 @@ public class DStarLite {
         return s;
     }
     private int heuristic(int start,int end){
-        int result=0;
-        int []s=floyd.getpath(start,end);
-        for (int i = 0; i < s.length-1; i++) {
-            result+=timeSeriesMapList.get(timecount)[s[i]][s[i+1]];
-        }
+//        int result=0;
+//        int []s=floyd.getpath(start,end);
+//        for (int i = 0; i < s.length-1; i++) {
+//            result+=timeSeriesMapList.get(timecount)[s[i]][s[i+1]];
+//        }
 
-//        return floyd.getpathlength(start,end);
-        return result;
+        return floyd.getpathlength(start,end);
+//        return result;
     }
 
 }

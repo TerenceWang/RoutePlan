@@ -80,14 +80,14 @@ public class Map {
         long dijruntime=0;
         long starruntime=0;
         int count=0;
+        TrafficFlow trafficFlow=new TrafficFlow(m);
 
         BufferedWriter out= null;
         try {
             out = new BufferedWriter(new FileWriter("data/" + "5-result-400map.txt",true));
-        for (int ii= 0; ii < 5; ++ii)
+        for (int ii= 0; ii < 3; ++ii)
         {
             System.out.println("It " + ii + "Start.");
-            TrafficFlow trafficFlow=new TrafficFlow(m);
             ArrayList<int[][]> tmp = new ArrayList<>();
             tmp=trafficFlow.generateTrafficFlow();
             System.out.println("TrafficFlow " + ii + " OVER.");
@@ -160,4 +160,5 @@ public class Map {
 //        }
 
     }
+
 }
