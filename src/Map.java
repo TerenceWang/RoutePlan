@@ -85,7 +85,7 @@ public class Map {
         BufferedWriter out= null;
         try {
             out = new BufferedWriter(new FileWriter("data/" + "5-result-400map.txt",true));
-        for (int ii= 0; ii < 3; ++ii)
+        for (int ii= 0; ii < 1; ++ii)
         {
             System.out.println("It " + ii + "Start.");
             ArrayList<int[][]> tmp = new ArrayList<>();
@@ -94,7 +94,7 @@ public class Map {
 
             DStarLite dStarLite=new DStarLite(m,floyd,tmp,start,end);
             long time3=System.currentTimeMillis();
-            int res=dStarLite.doDStarLite();
+            int res=dStarLite.doDStarLiteLabel();
             long time4=System.currentTimeMillis();
             if(res<0)
                 continue;
