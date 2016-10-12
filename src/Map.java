@@ -82,6 +82,9 @@ public class Map {
         long starlabelruntime=0;
         long starlabeldistance = 0;
         long starlabeltime = 0;
+        long astartime=0;
+        long astarruntime=0;
+        long astardistance=0;
         int count=0;
         TrafficFlow trafficFlow=new TrafficFlow(m);
 
@@ -116,6 +119,16 @@ public class Map {
             }
             System.out.println("2");
 
+            RepeatAStar repeatAStar = new RepeatAStar(tmp, floyd, start, end);
+            long time7=System.currentTimeMillis();
+            res=repeatAStar.dorepeatastar();
+            long time8=System.currentTimeMillis();
+            if(res<0){
+                System.out.println("repeatAStar Crash");
+                continue;
+            }
+            System.out.println("3");
+
             RepeatDijsktra repeatDijsktra=new RepeatDijsktra(tmp,start,end);
             long time1=System.currentTimeMillis();
             res=repeatDijsktra.doRepeatDijsktra();
@@ -124,12 +137,13 @@ public class Map {
                 System.out.println("repeatDijsktra Crash");
                 continue;
             }
-            System.out.println("3");
+            System.out.println("4");
 
 
             dijruntime+=(time2-time1);
             starruntime+=(time4-time3);
             starlabelruntime += (time6-time5);
+            astarruntime += (time8-time7);
             count++;
 
 
@@ -145,9 +159,10 @@ public class Map {
 //                System.out.println(dStarLite.getpath()[i]);
 //            }
             System.out.println("===============");
-            System.out.println(dStarLite.getTimecount() + " " + dStarLite.getpathlength() );
-            System.out.println(repeatDijsktra.getTimecount() + " " + repeatDijsktra.getpathlength());
-            System.out.println(dStarLiteLabel.getTimecount() + " " + dStarLiteLabel.getpathlength());
+            System.out.println("dStarLite: "+ dStarLite.getTimecount() + " " + dStarLite.getpathlength() );
+            System.out.println("repeatDijsktra: "+repeatDijsktra.getTimecount() + " " + repeatDijsktra.getpathlength());
+            System.out.println("dStarLiteLabel: "+dStarLiteLabel.getTimecount() + " " + dStarLiteLabel.getpathlength());
+            System.out.println("repeatAStar: "+repeatAStar.getTimecount()+" "+repeatAStar.getpathlength());
             System.out.println("===============");
 
             startimecount+=dStarLite.getTimecount();
@@ -156,7 +171,12 @@ public class Map {
             starlabeldistance+=dStarLiteLabel.getpathlength();
             dijdistance+=repeatDijsktra.getpathlength();
             dijtime+=repeatDijsktra.getTimecount();
-//            out.write(dStarLite.getTimecount()+" "+dStarLite.getpathlength()+" "+repeatDijsktra.getTimecount()+" "+repeatDijsktra.getpathlength());
+            astarruntime+=repeatAStar.getTimecount();
+            astardistance+=repeatAStar.getpathlength();
+            out.write(dStarLite.getTimecount()+" "+dStarLite.getpathlength()+" "
+                    +dStarLiteLabel.getTimecount()+" "+dStarLiteLabel.getpathlength()+" "
+                    +repeatDijsktra.getTimecount()+" "+repeatDijsktra.getpathlength()+" "
+                    +repeatAStar.getTimecount()+" "+repeatAStar.getpathlength());
 //            out.newLine();
 //            System.out.println(dStarLite.getTimecount());
 //            System.out.println(dStarLite.getpathlength());
@@ -170,10 +190,11 @@ public class Map {
             e.printStackTrace();
         }
         System.out.println("count: "+count);
-        System.out.println(dijdistance+" "+dijtime);
-        System.out.println(stardistance+" "+startimecount);
-        System.out.println(starlabeldistance + " " + starlabeltime);
-        System.out.println(dijruntime+" "+starruntime + " " + starlabelruntime);
+        System.out.println("DIJ: "+dijdistance+" "+dijtime);
+        System.out.println("DSTARLITE: "+stardistance+" "+startimecount);
+        System.out.println("DSTARLITELABEL: "+starlabeldistance + " " + starlabeltime);
+        System.out.println("ASTAR: "+astardistance + " " + astarruntime);
+        System.out.println("RUNTIME: "+dijruntime+" "+starruntime + " " + starlabelruntime);
 //        for (int i = 0; i < 2; i++) {
 //            for(int j = 0; j < tmp.get(i).length; ++j) {
 //                for(int k = 0; k < tmp.get(i).length; ++k)
