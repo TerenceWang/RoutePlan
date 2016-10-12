@@ -49,7 +49,7 @@ public class Map {
 
     public static void main(String[] args) {
         Map m=new Map();
-        m.readmap("data/nodenumber_400_edgenumber_1376.map");
+        m.readmap("data/nodenumber_900_edgenumber_3165.map");
         int [][]s=m.graph.getEdgeMatrix();
         int start=5;
         int end=300;
