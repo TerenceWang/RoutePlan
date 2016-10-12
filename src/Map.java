@@ -106,15 +106,15 @@ public class Map {
             }
             System.out.println("1");
 
-            DStarLite dStarLiteLabel=new DStarLite(m,floyd,tmp,start,end);
-            long time5=System.currentTimeMillis();
-            res=dStarLiteLabel.doDStarLiteLabel();
-            long time6=System.currentTimeMillis();
-            if(res<0) {
-                System.out.println("dStarLiteLabel Crash");
-                continue;
-            }
-            System.out.println("2");
+//            DStarLite dStarLiteLabel=new DStarLite(m,floyd,tmp,start,end);
+//            long time5=System.currentTimeMillis();
+//            res=dStarLiteLabel.doDStarLiteLabel();
+//            long time6=System.currentTimeMillis();
+//            if(res<0) {
+//                System.out.println("dStarLiteLabel Crash");
+//                continue;
+//            }
+//            System.out.println("2");
 
             RepeatDijsktra repeatDijsktra=new RepeatDijsktra(tmp,start,end);
             long time1=System.currentTimeMillis();
@@ -129,7 +129,7 @@ public class Map {
 
             dijruntime+=(time2-time1);
             starruntime+=(time4-time3);
-            starlabelruntime += (time6-time5);
+            //starlabelruntime += (time6-time5);
             count++;
 
 
@@ -147,13 +147,13 @@ public class Map {
             System.out.println("===============");
             System.out.println(dStarLite.getTimecount() + " " + dStarLite.getpathlength() );
             System.out.println(repeatDijsktra.getTimecount() + " " + repeatDijsktra.getpathlength());
-            System.out.println(dStarLiteLabel.getTimecount() + " " + dStarLiteLabel.getpathlength());
+            //System.out.println(dStarLiteLabel.getTimecount() + " " + dStarLiteLabel.getpathlength());
             System.out.println("===============");
 
             startimecount+=dStarLite.getTimecount();
             stardistance+=dStarLite.getpathlength();
-            starlabeltime+=dStarLiteLabel.getTimecount();
-            starlabeldistance+=dStarLiteLabel.getpathlength();
+            //starlabeltime+=dStarLiteLabel.getTimecount();
+            //starlabeldistance+=dStarLiteLabel.getpathlength();
             dijdistance+=repeatDijsktra.getpathlength();
             dijtime+=repeatDijsktra.getTimecount();
 //            out.write(dStarLite.getTimecount()+" "+dStarLite.getpathlength()+" "+repeatDijsktra.getTimecount()+" "+repeatDijsktra.getpathlength());
