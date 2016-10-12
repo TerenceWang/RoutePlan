@@ -39,13 +39,19 @@ public class RepeatDijsktra {
                         min=t[i];
                 }
                 if(min==Integer.MAX_VALUE)
+                {
+                    System.out.println("ALONE.");
                     return -1;
+                }
                 temp=min;
             }else
                 temp=djj.getpath(end)[1];
             timecount+=timeSeriesMapList.get(timecount)[now][temp];
             if(timecount>=timeSeriesMapList.size())
+            {
+                System.out.println("OverTime.");
                 return -1;
+            }
             distancecount+=timeSeriesMapList.get(0)[now][temp];
             pathcount.add(temp);
             now=temp;
