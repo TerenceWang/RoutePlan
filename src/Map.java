@@ -173,10 +173,10 @@ public class Map {
             dijtime+=repeatDijsktra.getTimecount();
             astarruntime+=repeatAStar.getTimecount();
             astardistance+=repeatAStar.getpathlength();
-            out.write(dStarLite.getTimecount()+" "+dStarLite.getpathlength()+" "
-                    +dStarLiteLabel.getTimecount()+" "+dStarLiteLabel.getpathlength()+" "
-                    +repeatDijsktra.getTimecount()+" "+repeatDijsktra.getpathlength()+" "
-                    +repeatAStar.getTimecount()+" "+repeatAStar.getpathlength());
+//            out.write(dStarLite.getTimecount()+" "+dStarLite.getpathlength()+" "
+//                    +dStarLiteLabel.getTimecount()+" "+dStarLiteLabel.getpathlength()+" "
+//                    +repeatDijsktra.getTimecount()+" "+repeatDijsktra.getpathlength()+" "
+//                    +repeatAStar.getTimecount()+" "+repeatAStar.getpathlength());
 //            out.newLine();
 //            System.out.println(dStarLite.getTimecount());
 //            System.out.println(dStarLite.getpathlength());
