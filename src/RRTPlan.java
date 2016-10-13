@@ -66,13 +66,13 @@ public class RRTPlan {
     public int getTimecount(){
         return timecount;
     }
-    public int repeatdorrtplan(){
+    public int dprrtplan(){
         now=start;
         stack.push(now);
         path.add(start);
         visited[start] = true;
         while(now!=end){
-            int next=dorrtplan();
+            int next=iterrrtplan();
             length = 0;
             time = 0;
             if(next<0)
@@ -114,7 +114,7 @@ public class RRTPlan {
 //        return floyd.getpathlength(start,end);
         return result;
     }
-    public int dorrtplan(){
+    public int iterrrtplan(){
 
 //        if (stack.size() > 10)
 //        {
@@ -160,7 +160,7 @@ public class RRTPlan {
                 time += timeSeriesMapList.get(timecount)[target][s[i]];
                 length += timeSeriesMapList.get(0)[target][s[i]];
                 visited[s[i]] = true;
-                int resultGet = dorrtplan();
+                int resultGet = iterrrtplan();
                 if (resultGet > -1)
                 {
                     visited[s[i]] = false;
