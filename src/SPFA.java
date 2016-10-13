@@ -4,6 +4,7 @@ import java.util.Queue;
 
 /**
  * Created by terence on 10/1/16.
+ * Process SPFA algorithm to get shortest route between start and end point
  */
 public class SPFA {
     private int [] Path;
@@ -12,6 +13,11 @@ public class SPFA {
     SPFA(){
 
     }
+    /**
+     * The main function, realize the SPFA algorithm
+     * @param edge   The weight of roads between two adjacent nodes 
+     * @param start  The start point
+     */
     public void dospfa(int [][] edge, int start){
         int x;
         int vextextotal=edge.length;
@@ -43,6 +49,11 @@ public class SPFA {
         }
 
     }
+    /** 
+     * Get an array of the compute result of the vehicle's route
+     * @param end  The Objective point of route planning 
+     * @return the vehicle's route
+     */
     public int[] getpath(int end){
         int p=end;
         ArrayList<Integer> tmp=new ArrayList<Integer>();
@@ -58,6 +69,10 @@ public class SPFA {
         }
         return result;
     }
+    /**
+     * Get the length of the vehicle's route
+     * @return Get the length of the vehicle's route
+     */
     public int getpathlength(int end){
         return shortestpath[end];
     }
