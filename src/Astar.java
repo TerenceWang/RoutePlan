@@ -15,6 +15,7 @@ public class Astar {
     	this.floyd=shortpath;
         pathlength=0;
     }
+
 	public void doastar(int[][] edge, int start, int end){
 		
     	/**********************************************************

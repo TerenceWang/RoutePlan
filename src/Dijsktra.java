@@ -7,6 +7,13 @@ public class Dijsktra {
     Dijsktra(){
 
     }
+
+    /**
+     * The main function of dijsktra
+     * @param edge store the edge in a adjacency matrix
+     * @param start
+     * @return
+     */
     public int dodijsktra(int[][] edge, int start){
         int vertexnumber=edge.length;
         shortestpath=new int[vertexnumber];

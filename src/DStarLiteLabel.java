@@ -1,13 +1,15 @@
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.PriorityQueue;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.zip.Inflater;
 
 /**
  * Created by terence on 10/13/16.
  */
+
+/**
+ * This is the algorithm for the DStarLite Label
+ *
+ */
+
 public class DStarLiteLabel {
 
     public Map map=new Map();
@@ -243,23 +245,18 @@ public class DStarLiteLabel {
                     }
                 }
             int timeold = timecount;
-//            System.out.println("+++ " + timecount + " " + curposition + " " + temp);
-            //System.out.println("cccc " + timeSeriesMapList.get(timecount)[curposition][temp] + " " + temp + " " + min);
             timecount += timeSeriesMapList.get(timecount)[curposition][temp];
             if(timecount>=timeSeriesMapList.size())
                 return -1;
             distancecount += timeSeriesMapList.get(0)[curposition][temp];
-            //System.out.println("ADD " + temp + " Remain " + priorityqueue.size());
             pathcount.add(temp);
             curposition = temp;
-            //System.out.println("Pos " + curposition);
             boolean flag=false;
             for (int i = 0; i < map.nodetotal; i++) {
                 int []k=getSucc(i);
                 for (int j = 0; j < k.length; j++) {
                     if(timeSeriesMapList.get(timecount)[i][k[j]]!=timeSeriesMapList.get(timeold)[i][k[j]]){
                         flag=true;
-                        //System.out.println("2!222");
                         UpdateVertex(i);
                     }
                 }
@@ -311,15 +308,14 @@ public class DStarLiteLabel {
      * @return The value of the rhs value
      */
     private int getRHS(int u){
-//        if (u == s_goal) return 0;
-//
-//        //if the cellHash doesn't contain the State u
-//        if (cellHash.get(u) == null)
-//            return heuristic(u, s_goal);
-//        return cellHash.get(u).rhs;
         return rhs[u];
     }
 
+    /**
+     * get the previous node of the node u
+     * @param u the id of the node u
+     * @return the list of the previous node of u
+     */
     private int[] getPrev(int u){
         int vertexnumbber=timeSeriesMapList.get(0).length;
         int vertexperline=(int)Math.sqrt(vertexnumbber);
@@ -348,6 +344,12 @@ public class DStarLiteLabel {
         }
         return s;
     }
+
+    /**
+     * get the previous node of the node u
+     * @param u u the id of the node u
+     * @return the list of the previous node of u
+     */
     public int[] getSucc(int u){
         int vertexnumbber=edge.length;
         int vertexperline=(int)Math.sqrt(vertexnumbber);
@@ -376,15 +378,24 @@ public class DStarLiteLabel {
         }
         return s;
     }
+
+    /**
+     * get the heuristic value of a pair node, we have two version. 1, use the value of the current map;
+     * 2. use the value of the time = 0 map, that is the value of the map without traffic time flow
+     * @param start the start point
+     * @param end the end point
+     * @return the heuristic value of a pair node
+     */
     private int heuristic(int start,int end){
 //        int result=0;
 //        int []s=floyd.getpath(start,end);
 //        for (int i = 0; i < s.length-1; i++) {
 //            result+=timeSeriesMapList.get(timecount)[s[i]][s[i+1]];
 //        }
-
-        return floyd.getpathlength(start,end);
+//
 //        return result;
+        return floyd.getpathlength(start,end);
+
     }
 
 }

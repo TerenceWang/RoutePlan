@@ -2,6 +2,11 @@ import java.util.*;
 /**
  * Created by abels on 2016/10/3.
  */
+
+/**
+ * This is the algorithm for the Floyd
+ *
+ */
 public class Floyd {
     private int[][] pre;
     private int[][] shortestpath;
@@ -9,6 +14,10 @@ public class Floyd {
 
     }
 
+    /**
+     * The main function of floyd
+     * @param edge store the edge in a adjacency matrix
+     */
     public void dofloyd(int[][] edge){
         int vertexnumber=edge.length;
 
@@ -40,7 +49,12 @@ public class Floyd {
                 }
     }
 
-
+    /**
+     *
+     * @param start the start point
+     * @param end the end point
+     * @return
+     */
     public int[] getpath(int start, int end){
 
         List path = new ArrayList<Integer>();
@@ -60,6 +74,12 @@ public class Floyd {
         return pathReturn;
     }
 
+    /**
+     * Get the length of the car's route
+     * @param start
+     * @param end
+     * @return Get the length of the car's route
+     */
     public int getpathlength(int start, int end){
         return shortestpath[start][end];
     }
