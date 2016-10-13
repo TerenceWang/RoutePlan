@@ -4,7 +4,9 @@ import java.util.*;
 import javax.management.OperationsException;
 
 import org.omg.CORBA.Current;
-
+ /** 
+  *  Astar is the class which realized the process of A* algorithm.
+  */
 public class Astar {
 	ArrayList<Integer> Estimate = new ArrayList<Integer>();  
     private int[] shortestpath;
@@ -15,11 +17,16 @@ public class Astar {
     	this.floyd=shortpath;
         pathlength=0;
     }
+    /**
+     * The main function of Astar in which we achieve every step of 
+     * A* algorithm
+     * @param edge[][] the weight of roads between two adjacent nodes 
+     * @param start The start point of route planning
+     * @param end  The Objective point of route planning
+     */
 	public void doastar(int[][] edge, int start, int end){
 		
-    	/**********************************************************
-    	 *  Definition & Initiation
-    	 */
+    	
     	int vertexnumber = edge.length;
         shortestpath=new int[vertexnumber];
         shortestpath[start]=0;
@@ -41,32 +48,16 @@ public class Astar {
         ArrayList<Integer> closedSet = new ArrayList<Integer>();
         int[] gValue = new int[vertexnumber];
         openSet.add(start);
-        
-        
-//        int [][] edgetmp=new int[vertexnumber][vertexnumber];
-//
-//        for (int i = 0; i < vertexnumber; i++) {
-//            for (int j = 0; j < vertexnumber; j++) {
-//                edgetmp[i][j]=edge[i][j];
-//            }
-//        }
-    	/**
-    	 *  Definition & Initiation
-    	 ***************************************************************************/
-        
-        /***************************************************************************
-         * Main Process  
-         */                   // While open list has some nodes in it 
-       while(openSet.size()!=0){		
-    	   
 
-	       int currentnode = getMinFvalue(openSet, f);
+    	/** 
+    	 * The main loop of processing operation the Openlist and CloseList
+         */                  
+       while(openSet.size()!=0){		
+    	   int currentnode = getMinFvalue(openSet, f);
 	      
 	       openSet.remove(openSet.indexOf(currentnode));
 	       closedSet.add(currentnode);
     	   	  
-
-   //for adjacent nodes
 		   ArrayList<Integer> adjacentNodes = getAdjacentNodes(currentnode,edge);
 		   for(int adj : adjacentNodes){
 			   if(closedSet.contains(adj))
@@ -88,12 +79,11 @@ public class Astar {
                    for (int i = 0; i < s.length-1; i++) {
                         result+=edge[s[i]][s[i+1]];
                    }
-//                   h[adj]=floyd.getpathlength(adj,end);
                    h[adj]=result;
 
 
                    f[adj]=h[adj]+g[adj];
-                   openSet.add(adj); // add node to openList
+                   openSet.add(adj); 
 			   }else{
 				   g[adj]= gValue[adj]+ edge[currentnode][adj];     		            // Calculate its g[] value
 
@@ -103,8 +93,7 @@ public class Astar {
                        result+=edge[s[i]][s[i+1]];
                    }
                    h[adj]=result;
-//                   h[adj]=floyd.getpathlength(adj,end);					// Calculate its h[] value
-
+                   
                    newf=g[adj]+h[adj];
 				   if(f[adj]>newf){
 					   f[adj]=newf;
@@ -113,7 +102,7 @@ public class Astar {
 		   }
 		   
 	    	  
-       } // end while
+       } 
        
        for (int node : closedSet) {
     	   Estimate.add(node);
@@ -124,8 +113,13 @@ public class Astar {
             pathlength+=edge[Estimate.get(i)][Estimate.get(i+1)];
         }
 
-    }//end func.doastar
-    
+    }
+    /** 
+     * Get an array of the compute result of the vehicle's route
+     * @param start The start point of route planning
+     * @param end  The Objective point of route planning 
+     * @return the vehicle's route
+     */
     public int[] getpath(int start, int end){
     	int[] result = new int [Estimate.size()];
     	for(int i=0;i<Estimate.size();i++){
@@ -135,31 +129,40 @@ public class Astar {
     	return result;
     }
 
-    
+    /**
+     * Get the length of the vehicle's route
+     * @return Get the length of the vehicle's route
+     */ 
     public int getpathlength(int end){
         return pathlength;
     }
+    
+    /**
+     * Get the the node with minimum f value in OpenList
+     * @param openSet the OpenList
+     * @param f the f value of each node
+     * @return the node with the minimum f value in OpenList
+     */
     public int getMinFvalue(ArrayList<Integer> openSet, int[] f){
 	   	int tempmin=Integer.MAX_VALUE,currentnode=0;
 	   	for(int i : openSet){
 	   		if(tempmin>=f[i]){
 			   tempmin=f[i];
 			   currentnode=i;
-			   
 			  
 		   }
 	   	}
     	return currentnode;
     }
+    /**
+     * Find the adjacent nodes of current node, if the node exist ,add it in the 
+     * ArrayList and return all the existing adjacent nodes at last.
+     * @param currentnode The current node
+     * @param edgetmp The temp value of the weight between every two nodes 
+     * @return all the existing adjacent nodes at last.
+     */
     public ArrayList<Integer> getAdjacentNodes(int currentnode, int[][] edgetmp) {
-//    	ArrayList<Integer> adjs = new ArrayList<Integer>();
-//    	for(int i=0;i<vertexnumber;i++){
-//    		if(edgetmp[currentnode][i]<Integer.MAX_VALUE){
-//    		    adjs.add(i);
-//    		}
-//
-//    	}
-//		return adjs;
+
         int vertexnumbber = edgetmp.length;
         int vertexperline = (int) Math.sqrt(vertexnumbber);
         int row = currentnode / vertexperline;
