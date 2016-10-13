@@ -5,6 +5,10 @@ import java.util.ArrayList;
 
 public class Main {
 
+    /**
+     * main function
+     *
+     */
     public static void main(String[] args) {
         Map m=new Map();
         m.readmap("data/nodenumber_900_edgenumber_3162.map");
@@ -13,22 +17,9 @@ public class Main {
         int end=300;
 
 
-        //Dijsktra dijsktra=new Dijsktra();
-        //dijsktra.dodijsktra(s,start);
-
         Floyd floyd=new Floyd();
         floyd.dofloyd(s);
         System.out.println("Floyd OVER.");
-
-//
-//
-//        SPFA sp=new SPFA();
-//        sp.dospfa(s,start);
-
-//        int ss[]=fl.getpath(start,end);
-//        for (int i = 0; i < ss.length; i++) {
-//            System.out.println(ss[i]+" ");
-//        }
 
 
         int startimecount=0;
@@ -51,11 +42,9 @@ public class Main {
             out = new BufferedWriter(new FileWriter("data/" + "1000-2-result-900map.txt",true));
             for (int ii= 0; ii < 1000; ++ii)
             {
-//            System.out.println("It " + ii + "Start.");
                 ArrayList<int[][]> tmp = new ArrayList<>();
                 tmp=trafficFlow.generateTrafficFlow();
-//            tmp=trafficFlow.generateCongestion();
-//            System.out.println("TrafficFlow " + ii + " OVER.");
+//            tmp=trafficFlow.generateCongestion();   /**It is a test method, we have not finish it yet!**/
 
                 DStarLite dStarLite=new DStarLite(m,floyd,tmp,start,end);
                 long time3=System.currentTimeMillis();
@@ -69,7 +58,7 @@ public class Main {
 
                 DStarLiteLabel dStarLiteLabel=new DStarLiteLabel(m,floyd,tmp,start,end);
                 long time5=System.currentTimeMillis();
-                //res=dStarLiteLabel.doDStarLiteLabel();
+                //res=dStarLiteLabel.doDStarLiteLabel();    /**In the real time test, the performance of DStarLite Label perform not so quite well**/
                 long time6=System.currentTimeMillis();
                 if(res<0) {
                     System.out.println("dStarLiteLabel Crash");
@@ -104,17 +93,6 @@ public class Main {
                 count++;
 
 
-//            for (int i = 0; i < repeatDijsktra.getpath().length; i++) {
-//                System.out.println(repeatDijsktra.getpath()[i]);
-//            }
-//            System.out.println("============");
-//            for (int i = 0; i < dijsktra.getpath(end).length; i++) {
-//                System.out.println(dijsktra.getpath(end)[i]);
-//            }
-//            System.out.println("===============");
-//            for (int i = 0; i < dStarLite.getpath().length; i++) {
-//                System.out.println(dStarLite.getpath()[i]);
-//            }
                 System.out.println("===============");
                 System.out.println("dStarLite: "+ dStarLite.getTimecount() + " " + dStarLite.getpathlength() );
                 System.out.println("repeatDijsktra: "+repeatDijsktra.getTimecount() + " " + repeatDijsktra.getpathlength());
@@ -125,16 +103,13 @@ public class Main {
                 stardistance+=dStarLite.getpathlength();
                 dijdistance+=repeatDijsktra.getpathlength();
                 dijtime+=repeatDijsktra.getTimecount();
-                astarruntime+=repeatAStar.getTimecount();
+                astartime+=repeatAStar.getTimecount();
                 astardistance+=repeatAStar.getpathlength();
+                //write each steps result into file
                 out.write(dStarLite.getTimecount()+" "+dStarLite.getpathlength()+" "
                         +repeatDijsktra.getTimecount()+" "+repeatDijsktra.getpathlength()+" "
                         +repeatAStar.getTimecount()+" "+repeatAStar.getpathlength());
                 out.newLine();
-//            System.out.println(dStarLite.getTimecount());
-//            System.out.println(dStarLite.getpathlength());
-//            System.out.println(repeatDijsktra.getTimecount());
-//            System.out.println(repeatDijsktra.getpathlength());
 
             }
             System.out.println("count: "+count);
@@ -142,15 +117,7 @@ public class Main {
             System.out.println("DSTARLITE: "+stardistance+" "+startimecount);
             System.out.println("ASTAR: "+astardistance + " " + astarruntime);
             System.out.println("RUNTIME: "+dijruntime+" "+starruntime + " " + starlabelruntime + " " +  astarruntime);
-//        for (int i = 0; i < 2; i++) {
-//            for(int j = 0; j < tmp.get(i).length; ++j) {
-//                for(int k = 0; k < tmp.get(i).length; ++k)
-//                    System.out.print(tmp.get(i)[j][k] + " ");
-//                System.out.println();
-//
-//            }
-//            System.out.println();
-//        }
+            //write the final count result
             out.write("count: "+count);
             out.newLine();
             out.write("DIJ: "+dijdistance+" "+dijtime);

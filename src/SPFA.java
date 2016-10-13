@@ -5,6 +5,8 @@ import java.util.Queue;
 /**
  * Created by terence on 10/1/16.
  * Process SPFA algorithm to get shortest route between start and end point
+ * The SPFA function is used to solve the problem that the graph has a negative  value, but in the design, we avoided
+ * it! So just write it by fun.... We did not use it.
  */
 public class SPFA {
     private int [] Path;
