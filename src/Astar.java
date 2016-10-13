@@ -17,11 +17,6 @@ public class Astar {
     }
 	public void doastar(int[][] edge, int start, int end){
 		
-		   
-        
-		
-		
-		
     	/**********************************************************
     	 *  Definition & Initiation
     	 */
@@ -48,13 +43,13 @@ public class Astar {
         openSet.add(start);
         
         
-        int [][] edgetmp=new int[vertexnumber][vertexnumber];
-        
-        for (int i = 0; i < vertexnumber; i++) {
-            for (int j = 0; j < vertexnumber; j++) {
-                edgetmp[i][j]=edge[i][j];
-            }
-        }
+//        int [][] edgetmp=new int[vertexnumber][vertexnumber];
+//
+//        for (int i = 0; i < vertexnumber; i++) {
+//            for (int j = 0; j < vertexnumber; j++) {
+//                edgetmp[i][j]=edge[i][j];
+//            }
+//        }
     	/**
     	 *  Definition & Initiation
     	 ***************************************************************************/
@@ -72,7 +67,7 @@ public class Astar {
     	   	  
 
    //for adjacent nodes
-		   ArrayList<Integer> adjacentNodes = getAdjacentNodes(currentnode, vertexnumber, edgetmp);
+		   ArrayList<Integer> adjacentNodes = getAdjacentNodes(currentnode,edge);
 		   for(int adj : adjacentNodes){
 			   if(closedSet.contains(adj))
 				   continue;
@@ -156,15 +151,36 @@ public class Astar {
 	   	}
     	return currentnode;
     }
-    public ArrayList<Integer> getAdjacentNodes(int currentnode, int vertexnumber, int[][] edgetmp){
-    	ArrayList<Integer> adjs = new ArrayList<Integer>();
-    	for(int i=0;i<vertexnumber;i++){
-    		if(edgetmp[currentnode][i]<Integer.MAX_VALUE){
-    		    adjs.add(i);
-    		}
-
-    	}
-		return adjs;
-    	
+    public ArrayList<Integer> getAdjacentNodes(int currentnode, int[][] edgetmp) {
+//    	ArrayList<Integer> adjs = new ArrayList<Integer>();
+//    	for(int i=0;i<vertexnumber;i++){
+//    		if(edgetmp[currentnode][i]<Integer.MAX_VALUE){
+//    		    adjs.add(i);
+//    		}
+//
+//    	}
+//		return adjs;
+        int vertexnumbber = edgetmp.length;
+        int vertexperline = (int) Math.sqrt(vertexnumbber);
+        int row = currentnode / vertexperline;
+        int col = currentnode % vertexperline;
+        ArrayList<Integer> t = new ArrayList<Integer>();
+        int cola = col - 1;
+        int colb = col + 1;
+        int rowa = row - 1;
+        int rowb = row + 1;
+        if (cola > -1 && edgetmp[currentnode][cola + row * vertexperline] != Integer.MAX_VALUE) {
+            t.add(cola + row * vertexperline);
+        }
+        if (colb < vertexperline && edgetmp[currentnode][colb + row * vertexperline] != Integer.MAX_VALUE) {
+            t.add(colb + row * vertexperline);
+        }
+        if (rowa > -1 && edgetmp[currentnode][rowa * vertexperline + col] != Integer.MAX_VALUE) {
+            t.add(rowa * vertexperline + col);
+        }
+        if (rowb < vertexperline && edgetmp[currentnode][rowb * vertexperline + col] != Integer.MAX_VALUE) {
+            t.add(rowb * vertexperline + col);
+        }
+        return t;
     }
 }
