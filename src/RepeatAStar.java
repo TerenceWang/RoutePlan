@@ -2,6 +2,8 @@ import java.util.ArrayList;
 
 /**
  * Created by terence on 10/10/16.
+ * Apply A* algorithm in dynamic route planning, in every timestep 
+ * calls the current map and calculate the current optimal route     
  */
 public class RepeatAStar {
     private ArrayList<int[][]> timeSeriesMapList;
@@ -19,13 +21,19 @@ public class RepeatAStar {
         timecount=0;
         distancecount=0;
     }
+    /**
+     * Main function of the algorithm, apply the A* algorithm in every 
+     * @return if return -1, means the vehicle can not get to the goal within the length of the timeSeriesMapList
+     * if return 0, means the vehicle can reach the objective point
+     */
+    
     public int dorepeatastar(){
         Astar astar=new Astar(floyd);
         astar.doastar(timeSeriesMapList.get(0),start,end);
         int now=astar.getpath(start,end)[1];
         timecount+=timeSeriesMapList.get(0)[start][now];
         distancecount+=timeSeriesMapList.get(0)[start][now];
-//        System.out.println("lalal "+distancecount);
+
         pathcount.add(start);
         pathcount.add(now);
         while(now!=end){
@@ -41,6 +49,10 @@ public class RepeatAStar {
         }
         return 0;
     }
+    /**
+     * Get the path array of the vehicle's route in the dynamic network
+     * @return Get the path array of the vehicle's route
+     */
     public int[] getpath(){
         int [] result=new int[pathcount.size()];
         for (int i = 0; i < result.length; i++) {
@@ -48,9 +60,17 @@ public class RepeatAStar {
         }
         return result;
     }
+    /**
+     * Get the length of the vehicle's route in the dynamic network
+     * @return Get the length of the vehicle's route
+     */
     public int getpathlength(){
         return distancecount;
     }
+    /**
+     * get the total time of the route
+     * @return the total time of the route
+     */
     public int getTimecount(){
         return timecount;
     }

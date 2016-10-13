@@ -275,8 +275,8 @@ public class DStarLiteLabel {
     }
 
     /**
-     * Get a array of the compute result of the car's route
-     * @return the car's route
+     * Get an array of the compute result of the vehicle's route
+     * @return the vehicle's route
      */
     public int[] getpath(){
         int [] result=new int[pathcount.size()];
@@ -287,8 +287,8 @@ public class DStarLiteLabel {
     }
 
     /**
-     * Get the length of the car's route
-     * @return Get the length of the car's route
+     * Get the length of the vehicle's route
+     * @return Get the length of the vehicle's route
      */
     public int getpathlength(){
         return distancecount;
