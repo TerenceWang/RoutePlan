@@ -76,8 +76,8 @@ public class Floyd {
 
     /**
      * Get the length of the car's route
-     * @param start
-     * @param end
+     * @param start the start point
+     * @param end the edn point
      * @return Get the length of the car's route
      */
     public int getpathlength(int start, int end){

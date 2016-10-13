@@ -1,6 +1,12 @@
 /**
  * Created by terence on 10/1/16.
  */
+
+
+/**
+ * This is the algorithm for the Dijsktra
+ */
+
 public class Dijsktra {
     private String[] path;
     private int[] shortestpath;
@@ -56,7 +62,11 @@ public class Dijsktra {
         return 0;
     }
 
-
+    /**
+     * get the car's route
+     * @param end the end point
+     * @return return the car's route
+     */
     public int[] getpath(int end ){
         String[] t=path[end].split(",");
         int [] result=new int [t.length];
@@ -65,6 +75,13 @@ public class Dijsktra {
         }
         return result;
     }
+
+    /**
+     *
+     * Get the length of the car's route
+     * @param end the end point
+     * @return Get the length of the car's route
+     */
     public int getpathlength(int end){
         return shortestpath[end];
     }

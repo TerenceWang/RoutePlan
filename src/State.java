@@ -12,6 +12,13 @@ public class State implements Comparable, java.io.Serializable{
     public int first;
     public int second;
 
+    /**
+     *
+     * @param that the onject to be compared
+     * @return -1 as the the this object smaller than input one
+     * 1 as the the this object greater than input one
+     * 0 as the the this object euqals input one
+     */
     public int compareTo(Object that)
     {
         //This is a modified version of the gt method

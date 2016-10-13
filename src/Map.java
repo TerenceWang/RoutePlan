@@ -4,6 +4,10 @@ import java.util.*;
 /**
  * Created by terence on 10/1/16.
  */
+
+/**
+ * This is the function for map
+ */
 public class Map {
 
     public AMWGraph graph;
@@ -14,6 +18,10 @@ public class Map {
 
     }
 
+    /**
+     * Read the map from the file, and store it in the AMWGraph structure
+     * @param filename the filename, the file is in the data floder
+     */
     public void readmap(String filename){
         File file = new File(filename);
         BufferedReader reader=null;

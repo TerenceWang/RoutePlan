@@ -1,9 +1,6 @@
 
 import java.util.*;
 
-import javax.management.OperationsException;
-
-import org.omg.CORBA.Current;
  /**
   *  Astar is the class which realized the process of A* algorithm.
   */
@@ -20,7 +17,7 @@ public class Astar {
     /**
      * The main function of Astar in which we achieve every step of
      * A* algorithm
-     * @param edge[][] the weight of roads between two adjacent nodes
+     * @param edge the weight of roads between two adjacent nodes
      * @param start The start point of route planning
      * @param end  The Objective point of route planning
      */

@@ -14,6 +14,13 @@ public class TrafficFlow {
         probMap = generateegedweigh();
     }
 
+    /**
+     * A test function for gernerate the congestion in the traffic map
+     * This function is still in test
+     * @return a time-series map. Each one time step, we get a map with some edge congested. The length of the list
+     * is the length of the total time
+     *
+     */
     public ArrayList<int[][]> generateCongestion()
     {
         int nodecount = m.graph.getNumOfVertex();
@@ -45,6 +52,10 @@ public class TrafficFlow {
         return result;
     }
 
+    /**
+     * for each node we can gernerate a array which record the probility that the traffic flow goes by this way.
+     * @return each node's traffic flow's prob distribtion. Actually, there are at most 4 way for the flows to go
+     */
     public double[][] generateegedweigh(){
         int nodecount=m.graph.getEdgeMatrix().length;
         int k=5;
@@ -65,35 +76,14 @@ public class TrafficFlow {
             double[] tmp = Normalization(result[i]);
             result[i] = tmp;
         }
-//            ArrayList<Double> countlist=new ArrayList<Double>();
-//            int id=m.graph.getFirstNeighbor(i);
-//            if(id!=-1){
-//                double temp=peredgeweight(k);
-//                if(temp<0)
-//                    countlist.add(0.0);
-//                else
-//                    countlist.add(temp);
-//            }
-//
-//            while(id!=-1){
-//                id=m.graph.getNextNeighbor(i,id);
-//                if(id!=-1){
-//                    double temp=peredgeweight(k);
-//                    if(temp<0)
-//                        countlist.add(0.0);
-//                    else
-//                        countlist.add(temp);
-//                }
-//            }
-//            Double []tmp=new Double[countlist.size()];
-//            countlist.toArray(tmp);
-//            double[] normalization = Normalization(tmp);
-//            result.add(normalization);
-//        }
         return result;
     }
 
-
+    /**
+     * Normalization function, divide each number by there sum up
+     * @param list a array to be Normalized
+     * @return a list after being Normalized
+     */
     private double[] Normalization(double[] list){
         double sum=0;
         double []result=new double[list.length];
@@ -109,6 +99,12 @@ public class TrafficFlow {
         }
         return result;
     }
+
+    /**
+     * for each node's each edge generate a weight
+     * @param k the maximun of the nodevalue
+     * @return the generated edge value
+     */
     private double peredgeweight(int k){
         Random r=new Random();
         double result=0;
@@ -124,6 +120,12 @@ public class TrafficFlow {
         return result;
     }
 
+    /**
+     * The main function of the traffic flow, generate the traffic flow in the traffic map
+     *  Using Bayes network to distribute the traffic flow, after the traffic flow on a edge is small enough, we
+     *  consider the traffic flow disappear.
+     * @return get a time-series map. Each one time step, we get a map, and the length of the arraylist,
+     */
     public ArrayList<int[][]> generateTrafficFlow()
     {
         ArrayList timeSeriesMapList = new ArrayList<int[][]>();
@@ -142,7 +144,6 @@ public class TrafficFlow {
         int timeFunctionConst = 200; // Const in time function
         int leastFlow = 50; // Ignore the flow under leastFlow.
         int countflow = 0;
-//        System.out.println(nodecount);
         for(int i = 0; i < nodecount; ++i)
             for(int j = 0; j < nodecount; ++j)
             {
@@ -150,12 +151,9 @@ public class TrafficFlow {
                 mapNow[i][j] = 0;
                 timeStartMap[i][j] = 0;
                 mapTemp[i][j] = 0;
-//                if (mapDefault[i][j] == Integer.MAX_VALUE)
-//                    mapDefault[i][j] = 0;
             }
         timeSeriesMapList.add(mapDefault);
-        //System.out.println("Init OVER.");
-        ;
+
 
         while(countflow < countInitFlow)
         {
@@ -174,11 +172,8 @@ public class TrafficFlow {
                             continue;
                         mapNow[i][k] += temp;
                         timeStartMap[i][k] = 1;
-//                        System.out.println(i + " " + k + " " + temp);
                     }
-//                    System.out.println(i);
                 }
-                //System.out.println("INIT "+ countflow);
             }
         }
         {
@@ -192,10 +187,6 @@ public class TrafficFlow {
                         timeMapOut[i][j]=Integer.MAX_VALUE;
                     else
                         timeMapOut[i][j] = timeMap[i][j];
-//                    if (timeMap[i][j] > 100)
-//                        System.out.println(1 + " " + i + " " + j + " " + timeMap[i][j]);
-//                if (timeMap[i][j] == 0)
-//                    timeMap[i][j] = Integer.MAX_VALUE;
                 }
             }
             timeSeriesMapList.add(timeMapOut);
@@ -208,7 +199,6 @@ public class TrafficFlow {
                     mapTemp[i][j] = 0;
                 mapNow[i][j] = 0;
             }
-        //System.out.println("1 OVER.");
         for(int timeSeries = 2; timeSeries < 600; ++timeSeries)
         {
             for (int i = 0; i < nodecount; ++i)
@@ -258,10 +248,6 @@ public class TrafficFlow {
                             timeMapOut[i][j]=Integer.MAX_VALUE;
                         else
                             timeMapOut[i][j] = timeMap[i][j];
-//                    if (mapNow[i][j] > 0)
-//                        System.out.println(timeSeries + " " + i + " " + j + " " + mapNow[i][j] * mapDefault[i][j] / 200);
-//                if (timeMap[i][j] == 0)
-//                    timeMap[i][j] = Integer.MAX_VALUE;
                     }
                 timeSeriesMapList.add(timeMapOut);
             }
@@ -274,29 +260,16 @@ public class TrafficFlow {
                         mapTemp[i][j] = 0;
                     mapNow[i][j] = 0;
                 }
-            //System.out.println(timeSeries + " OVER.");
         }
 
 
         return timeSeriesMapList;
     }
-
-    private  double findweight( Map m,ArrayList<double[]> s,int start,int end){
-
-        int id=m.graph.getFirstNeighbor(start);
-        int count=0;
-        if(id==end){
-            return s.get(start)[count];
-        }
-        while(id!=-1){
-            id = m.graph.getNextNeighbor(start,id);
-            count++;
-            if(id==end){
-                return s.get(start)[count];
-            }
-        }
-        return -1;
-    }
+    /**
+     * get the previous node of the node u
+     * @param u u the id of the node u
+     * @return the list of the previous node of u
+     */
     public int[] getSucc(int u){
         int vertexnumbber=edge.length;
         int vertexperline=(int)Math.sqrt(vertexnumbber);
