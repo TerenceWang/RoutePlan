@@ -99,79 +99,79 @@ public class DStarLite {
         }
 
     }
-    private void CoumpueShortestPathLabelVersion(){
-        State topv=priorityqueue.peek();
-        while (!priorityqueue.isEmpty()
-                &&(priorityqueue.peek().compareTo(CalculateKey(curposition))==-1
-                ||getRHS(curposition)!=getG(curposition))){
-            if(g[topv.vertex] > rhs[topv.vertex]){
-                g[topv.vertex] = rhs[topv.vertex];
-                tag[topv.vertex]=2;
-                priorityqueue.remove(topv);
-                int[] k=getPrev(topv.vertex);
-                for (int i = 0; i < k.length; i++) {
-                    update_lower(k[i],topv);
-                }
-            }
-            else{
-                g[topv.vertex] = Integer.MAX_VALUE;
-                int[] k=getPrev(topv.vertex);
-                for (int i = 0; i < k.length; i++) {
-                    update_raise(k[i]);
-                }
-            }
-            topv = priorityqueue.peek();
-        }
-    }
-    private void update_lower(int u, State sourcev){
-        switch (tag[u]){
-            case 0:
-                rhs[u] = g[sourcev.vertex] + timeSeriesMapList.get(timecount)[u][sourcev.vertex];
-                father[u] = sourcev.vertex;
-                tag[u] = 1;
-                priorityqueue.add(CalculateKey(u));
-                break;
-            case 1:
-                if(g[sourcev.vertex] != Integer.MAX_VALUE
-                        && rhs[u] > g[sourcev.vertex] + timeSeriesMapList.get(timecount)[u][sourcev.vertex]) {
-                    rhs[u] = g[sourcev.vertex] + timeSeriesMapList.get(timecount)[u][sourcev.vertex];
-                    father[u] = sourcev.vertex;
-                    priorityqueue.remove(new State(u, 0, 0));
-                    priorityqueue.add(CalculateKey(u));
-                }
-                break;
-            case 2:
-                if(g[sourcev.vertex] != Integer.MAX_VALUE
-                        && rhs[u] > g[sourcev.vertex]+timeSeriesMapList.get(timecount)[u][sourcev.vertex]
-                        || father[u]==sourcev.vertex){
-                    rhs[u] = g[sourcev.vertex] + timeSeriesMapList.get(timecount)[u][sourcev.vertex];
-                    father[u] = sourcev.vertex;
-                    tag[u] = 1;
-                    priorityqueue.add(CalculateKey(u));
-                }
-                break;
-        }
-    }
-    private void update_raise(int u){
-        if(u!=end){
-            int []k=getSucc(u);
-            for (int i = 0; i < k.length; i++) {
-                if(g[k[i]] != Integer.MAX_VALUE && tag[k[i]]==2 && rhs[u]>g[k[i]]+timeSeriesMapList.get(timecount)[u][k[i]]){
-                    rhs[u] = g[k[i]] + timeSeriesMapList.get(timecount)[u][k[i]];
-                    father[u] = k[i];
-                }
-            }
-            if(rhs[u]!=g[u]&&tag[u]!=1){
-                tag[u] = 1;
-                priorityqueue.add(CalculateKey(u));
-            }
-            if(rhs[u]==g[u]&&tag[u]==1){
-                tag[u] = 2;
-                priorityqueue.remove(new State(u,0,0));
-            }
-
-        }
-    }
+//    private void CoumpueShortestPathLabelVersion(){
+//        State topv=priorityqueue.peek();
+//        while (!priorityqueue.isEmpty()
+//                &&(priorityqueue.peek().compareTo(CalculateKey(curposition))==-1
+//                ||getRHS(curposition)!=getG(curposition))){
+//            if(g[topv.vertex] > rhs[topv.vertex]){
+//                g[topv.vertex] = rhs[topv.vertex];
+//                tag[topv.vertex]=2;
+//                priorityqueue.remove(topv);
+//                int[] k=getPrev(topv.vertex);
+//                for (int i = 0; i < k.length; i++) {
+//                    update_lower(k[i],topv);
+//                }
+//            }
+//            else{
+//                g[topv.vertex] = Integer.MAX_VALUE;
+//                int[] k=getPrev(topv.vertex);
+//                for (int i = 0; i < k.length; i++) {
+//                    update_raise(k[i]);
+//                }
+//            }
+//            topv = priorityqueue.peek();
+//        }
+//    }
+//    private void update_lower(int u, State sourcev){
+//        switch (tag[u]){
+//            case 0:
+//                rhs[u] = g[sourcev.vertex] + timeSeriesMapList.get(timecount)[u][sourcev.vertex];
+//                father[u] = sourcev.vertex;
+//                tag[u] = 1;
+//                priorityqueue.add(CalculateKey(u));
+//                break;
+//            case 1:
+//                if(g[sourcev.vertex] != Integer.MAX_VALUE
+//                        && rhs[u] > g[sourcev.vertex] + timeSeriesMapList.get(timecount)[u][sourcev.vertex]) {
+//                    rhs[u] = g[sourcev.vertex] + timeSeriesMapList.get(timecount)[u][sourcev.vertex];
+//                    father[u] = sourcev.vertex;
+//                    priorityqueue.remove(new State(u, 0, 0));
+//                    priorityqueue.add(CalculateKey(u));
+//                }
+//                break;
+//            case 2:
+//                if(g[sourcev.vertex] != Integer.MAX_VALUE
+//                        && rhs[u] > g[sourcev.vertex]+timeSeriesMapList.get(timecount)[u][sourcev.vertex]
+//                        || father[u]==sourcev.vertex){
+//                    rhs[u] = g[sourcev.vertex] + timeSeriesMapList.get(timecount)[u][sourcev.vertex];
+//                    father[u] = sourcev.vertex;
+//                    tag[u] = 1;
+//                    priorityqueue.add(CalculateKey(u));
+//                }
+//                break;
+//        }
+//    }
+//    private void update_raise(int u){
+//        if(u!=end){
+//            int []k=getSucc(u);
+//            for (int i = 0; i < k.length; i++) {
+//                if(g[k[i]] != Integer.MAX_VALUE && tag[k[i]]==2 && rhs[u]>g[k[i]]+timeSeriesMapList.get(timecount)[u][k[i]]){
+//                    rhs[u] = g[k[i]] + timeSeriesMapList.get(timecount)[u][k[i]];
+//                    father[u] = k[i];
+//                }
+//            }
+//            if(rhs[u]!=g[u]&&tag[u]!=1){
+//                tag[u] = 1;
+//                priorityqueue.add(CalculateKey(u));
+//            }
+//            if(rhs[u]==g[u]&&tag[u]==1){
+//                tag[u] = 2;
+//                priorityqueue.remove(new State(u,0,0));
+//            }
+//
+//        }
+//    }
     private void ComputeShortestPath(){
         //System.out.println("compute " + priorityqueue.peek().compareTo(CalculateKey(curposition)) + " " + (getRHS(curposition)!=getG(curposition)));
         //System.out.println(priorityqueue.peek().vertex + " " + priorityqueue.peek().first + " " + priorityqueue.peek().second
@@ -222,68 +222,68 @@ public class DStarLite {
 //            }
         }
     }
-    public int doDStarLiteLabel(){
-        int last=curposition;
-        init();
-        CoumpueShortestPathLabelVersion();
-        pathcount.add(start);
-        while (curposition != end){
-            int []s=getSucc(curposition);
-            int min=Integer.MAX_VALUE;
-            //System.out.println("Pos before " + curposition);
-            int temp = -1;
-            for (int i = 0; i < s.length; i++) {
-//                System.out.println("1+++ " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]+ " " + g[s[i]]);
-                if (g[s[i]] != Integer.MAX_VALUE && timeSeriesMapList.get(timecount)[curposition][s[i]] != Integer.MAX_VALUE &&
-                        min > timeSeriesMapList.get(timecount)[curposition][s[i]] + g[s[i]]){
-                    min = (timeSeriesMapList.get(timecount)[curposition][s[i]] + g[s[i]]);
-                    temp = s[i];
-                    //System.out.println("1!! "+ temp + " " + min + " " + (timeSeriesMapList.get(timecount)[curposition][s[i]]+g[s[i]]));
-                }
-            }
-            if (temp == -1)
-                for (int i = 0; i < s.length; i++) {
-//                    System.out.println("2+++ " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]);
-                    if (min>timeSeriesMapList.get(timecount)[curposition][s[i]]){
-                        min = (timeSeriesMapList.get(timecount)[curposition][s[i]]);
-                        temp=s[i];
-                        //System.out.println("1!! "+ temp + " " + min + " " + (timeSeriesMapList.get(timecount)[curposition][s[i]]));
-                    }
-                }
-            int timeold = timecount;
-//            System.out.println("+++ " + timecount + " " + curposition + " " + temp);
-            //System.out.println("cccc " + timeSeriesMapList.get(timecount)[curposition][temp] + " " + temp + " " + min);
-            timecount += timeSeriesMapList.get(timecount)[curposition][temp];
-            if(timecount>=timeSeriesMapList.size())
-                return -1;
-            distancecount += timeSeriesMapList.get(0)[curposition][temp];
-            //System.out.println("ADD " + temp + " Remain " + priorityqueue.size());
-            pathcount.add(temp);
-            curposition = temp;
-            //System.out.println("Pos " + curposition);
-            boolean flag=false;
-            for (int i = 0; i < map.nodetotal; i++) {
-                int []k=getSucc(i);
-                for (int j = 0; j < k.length; j++) {
-                    if(timeSeriesMapList.get(timecount)[i][k[j]]!=timeSeriesMapList.get(timeold)[i][k[j]]){
-                        flag=true;
-                        //System.out.println("2!222");
-                        UpdateVertex(i);
-                    }
-                }
-            }
-            if(priorityqueue.isEmpty())
-            {
-                priorityqueue.add(CalculateKey(curposition));
-            }
-            if (flag){
-                km += heuristic(last, curposition);
-                last=curposition;
-                CoumpueShortestPathLabelVersion();
-            }
-        }
-        return 0;
-    }
+//    public int doDStarLiteLabel(){
+//        int last=curposition;
+//        init();
+//        CoumpueShortestPathLabelVersion();
+//        pathcount.add(start);
+//        while (curposition != end){
+//            int []s=getSucc(curposition);
+//            int min=Integer.MAX_VALUE;
+//            //System.out.println("Pos before " + curposition);
+//            int temp = -1;
+//            for (int i = 0; i < s.length; i++) {
+////                System.out.println("1+++ " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]+ " " + g[s[i]]);
+//                if (g[s[i]] != Integer.MAX_VALUE && timeSeriesMapList.get(timecount)[curposition][s[i]] != Integer.MAX_VALUE &&
+//                        min > timeSeriesMapList.get(timecount)[curposition][s[i]] + g[s[i]]){
+//                    min = (timeSeriesMapList.get(timecount)[curposition][s[i]] + g[s[i]]);
+//                    temp = s[i];
+//                    //System.out.println("1!! "+ temp + " " + min + " " + (timeSeriesMapList.get(timecount)[curposition][s[i]]+g[s[i]]));
+//                }
+//            }
+//            if (temp == -1)
+//                for (int i = 0; i < s.length; i++) {
+////                    System.out.println("2+++ " + temp + " " +  min + " " + s[i] + " " + timeSeriesMapList.get(timecount)[curposition][s[i]]);
+//                    if (min>timeSeriesMapList.get(timecount)[curposition][s[i]]){
+//                        min = (timeSeriesMapList.get(timecount)[curposition][s[i]]);
+//                        temp=s[i];
+//                        //System.out.println("1!! "+ temp + " " + min + " " + (timeSeriesMapList.get(timecount)[curposition][s[i]]));
+//                    }
+//                }
+//            int timeold = timecount;
+////            System.out.println("+++ " + timecount + " " + curposition + " " + temp);
+//            //System.out.println("cccc " + timeSeriesMapList.get(timecount)[curposition][temp] + " " + temp + " " + min);
+//            timecount += timeSeriesMapList.get(timecount)[curposition][temp];
+//            if(timecount>=timeSeriesMapList.size())
+//                return -1;
+//            distancecount += timeSeriesMapList.get(0)[curposition][temp];
+//            //System.out.println("ADD " + temp + " Remain " + priorityqueue.size());
+//            pathcount.add(temp);
+//            curposition = temp;
+//            //System.out.println("Pos " + curposition);
+//            boolean flag=false;
+//            for (int i = 0; i < map.nodetotal; i++) {
+//                int []k=getSucc(i);
+//                for (int j = 0; j < k.length; j++) {
+//                    if(timeSeriesMapList.get(timecount)[i][k[j]]!=timeSeriesMapList.get(timeold)[i][k[j]]){
+//                        flag=true;
+//                        //System.out.println("2!222");
+//                        UpdateVertex(i);
+//                    }
+//                }
+//            }
+//            if(priorityqueue.isEmpty())
+//            {
+//                priorityqueue.add(CalculateKey(curposition));
+//            }
+//            if (flag){
+//                km += heuristic(last, curposition);
+//                last=curposition;
+//                CoumpueShortestPathLabelVersion();
+//            }
+//        }
+//        return 0;
+//    }
     public int doDStarLite(){
         int last=curposition;
         init();
